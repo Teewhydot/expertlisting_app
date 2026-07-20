@@ -28,8 +28,7 @@ class _MainScreenState extends State<MainScreen> {
       height: 24,
       colorFilter: isActive 
         ? const ColorFilter.mode(AppColors.primaryGreen, BlendMode.srcIn)
-        : null, // Keep original colors if no colorFilter or apply grey if needed.
-                // The provided SVGs already have their fill/stroke colors set to #B8B8B8 or similar.
+        : const ColorFilter.mode(AppColors.textGrey, BlendMode.srcIn),
     );
   }
 
