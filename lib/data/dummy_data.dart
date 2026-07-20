@@ -94,7 +94,7 @@ class DummyData {
       mediaType: MediaType.carousel,
       mediaUrls: [
         'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=800',
-        'https://images.unsplash.com/photo-1600607687931-cebf102fdf56?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800',
         'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800',
         'https://images.unsplash.com/photo-1600566753086-00f18efc2291?auto=format&fit=crop&q=80&w=800',
       ],
