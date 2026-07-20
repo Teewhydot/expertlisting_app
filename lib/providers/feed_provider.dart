@@ -14,7 +14,7 @@ class FeedProvider extends ChangeNotifier {
   bool _isLoadingMore = false;
   String? errorMessage;
   RealtimeChannel? _realtimeChannel;
-  String _currentType = 'property';
+  String _currentType = 'all';
 
   int _pendingPingsCount = 0;
   Timer? _throttleTimer;

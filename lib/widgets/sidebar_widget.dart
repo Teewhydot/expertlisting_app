@@ -97,6 +97,18 @@ class SidebarFilters extends StatelessWidget {
               runSpacing: 8,
               children: [
                 FilterChip(
+                  label: const Text('All'),
+                  selected: feedProvider.currentType == 'all',
+                  onSelected: (val) {
+                    Navigator.pop(context);
+                    feedProvider.setType('all');
+                  },
+                  backgroundColor: AppColors.cardBackground,
+                  selectedColor: AppColors.primaryGreen.withValues(alpha: 0.2),
+                  checkmarkColor: AppColors.primaryGreen,
+                  labelStyle: const TextStyle(color: AppColors.textLight),
+                ),
+                FilterChip(
                   label: const Text('Property'),
                   selected: feedProvider.currentType == 'property',
                   onSelected: (val) {
