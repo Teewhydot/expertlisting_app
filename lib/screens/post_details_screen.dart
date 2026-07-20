@@ -74,8 +74,15 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
           Expanded(
             child: ListView(
               children: [
-                // We wrap it to disable its own navigation loop if needed, but it's fine.
-                FeedPostCard(post: widget.post, isDetailMode: true),
+                Consumer<FeedProvider>(
+                  builder: (context, provider, child) {
+                    final updatedPost = provider.posts.firstWhere(
+                      (p) => p.id == widget.post.id,
+                      orElse: () => widget.post,
+                    );
+                    return FeedPostCard(post: updatedPost, isDetailMode: true);
+                  },
+                ),
                 const Divider(
                   color: AppColors.dividerColor,
                   thickness: 1,

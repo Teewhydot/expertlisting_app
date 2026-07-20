@@ -8,8 +8,13 @@ import 'comments_bottom_sheet.dart';
 
 class PostActionBar extends StatelessWidget {
   final PostModel post;
+  final bool isDetailMode;
 
-  const PostActionBar({super.key, required this.post});
+  const PostActionBar({
+    super.key,
+    required this.post,
+    this.isDetailMode = false,
+  });
 
   void _showComments(BuildContext context) {
     showModalBottomSheet(
@@ -39,10 +44,14 @@ class PostActionBar extends StatelessWidget {
             _buildActionIcon(
               Icons.chat_bubble_outline,
               post.comments.toString(),
-              onTap: () => _showComments(context),
+              onTap: isDetailMode ? null : () => _showComments(context),
             ),
             const SizedBox(width: 16),
-            const Icon(Icons.send_outlined, color: AppColors.textLight, size: 20),
+            const Icon(
+              Icons.send_outlined,
+              color: AppColors.textLight,
+              size: 20,
+            ),
             const Spacer(),
             _buildActionIcon(Icons.bookmark_border, post.bookmarks.toString()),
           ],
@@ -61,7 +70,10 @@ class PostActionBar extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.cardBackground, width: 2),
+                        border: Border.all(
+                          color: AppColors.cardBackground,
+                          width: 2,
+                        ),
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
@@ -80,10 +92,7 @@ class PostActionBar extends StatelessWidget {
             Expanded(
               child: Text(
                 post.likedByText,
-                style: const TextStyle(
-                  color: AppColors.textGrey,
-                  fontSize: 12,
-                ),
+                style: const TextStyle(color: AppColors.textGrey, fontSize: 12),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -94,7 +103,12 @@ class PostActionBar extends StatelessWidget {
     );
   }
 
-  Widget _buildActionIcon(IconData icon, String count, {Color color = AppColors.textLight, VoidCallback? onTap}) {
+  Widget _buildActionIcon(
+    IconData icon,
+    String count, {
+    Color color = AppColors.textLight,
+    VoidCallback? onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -102,13 +116,7 @@ class PostActionBar extends StatelessWidget {
         children: [
           Icon(icon, color: color, size: 20),
           const SizedBox(width: 4),
-          Text(
-            count,
-            style: TextStyle(
-              color: color,
-              fontSize: 14,
-            ),
-          ),
+          Text(count, style: TextStyle(color: color, fontSize: 14)),
         ],
       ),
     );

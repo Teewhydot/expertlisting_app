@@ -64,7 +64,10 @@ class _FeedPostCardState extends State<FeedPostCard> {
                     const SizedBox(height: 12),
                   _buildMedia(),
                   const SizedBox(height: 16),
-                  PostActionBar(post: widget.post),
+                  PostActionBar(
+                    post: widget.post,
+                    isDetailMode: widget.isDetailMode,
+                  ),
                 ],
               ),
             ),
