@@ -83,17 +83,15 @@ class _FeedScreenState extends State<FeedScreen> {
                 child: ListView.separated(
                   controller: _scrollController,
                   itemCount: (provider.isLoading && provider.posts.isEmpty)
-                      ? 4 // 1 story list + 3 shimmer posts
-                      : provider.posts.length +
-                            2, // +1 for stories, +1 for loading indicator
+                      ? 3 // 3 shimmer posts
+                      : provider.posts.length + 1, // +1 for loading indicator
                   separatorBuilder: (context, index) => const Divider(),
                   itemBuilder: (context, index) {
                     if (provider.isLoading && provider.posts.isEmpty) {
-                      if (index == 0) return const ShimmerStoryList();
                       return const ShimmerPostCard();
                     }
 
-                    if (index == provider.posts.length + 1) {
+                    if (index == provider.posts.length) {
                       return provider.isLoadingMore
                           ? const Padding(
                               padding: EdgeInsets.all(16.0),
@@ -102,7 +100,7 @@ class _FeedScreenState extends State<FeedScreen> {
                           : const SizedBox.shrink();
                     }
 
-                    final post = provider.posts[index - 1];
+                    final post = provider.posts[index];
                     return FeedPostCard(post: post);
                   },
                 ),
