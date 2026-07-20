@@ -46,7 +46,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
         ),
-        IconButton(icon: const Icon(Icons.menu), onPressed: () {}),
+        IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () {
+            Scaffold.of(context).openEndDrawer();
+          },
+        ),
         const SizedBox(width: 8),
       ],
     );

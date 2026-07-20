@@ -21,6 +21,7 @@ class FeedProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   bool get isLoadingMore => _isLoadingMore;
   bool get hasMore => _nextCursor != null;
+  String get currentType => _currentType;
 
   static const String _cacheKeyPrefix = 'feed_cache_';
 

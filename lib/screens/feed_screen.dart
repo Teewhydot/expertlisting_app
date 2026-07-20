@@ -7,6 +7,7 @@ import '../widgets/shimmer_post_card.dart';
 import '../widgets/story_list.dart';
 import '../widgets/shimmer_story_list.dart';
 import '../models/story_model.dart';
+import '../widgets/sidebar_widget.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});
@@ -80,6 +81,7 @@ class _FeedScreenState extends State<FeedScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(),
+      endDrawer: const SidebarWidget(),
       body: Consumer<FeedProvider>(
         builder: (context, provider, child) {
           if (provider.errorMessage != null && provider.posts.isEmpty) {
