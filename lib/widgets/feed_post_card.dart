@@ -140,7 +140,7 @@ class _FeedPostCardState extends State<FeedPostCard> {
           colorFilter: const ColorFilter.mode(AppColors.textGrey, BlendMode.srcIn),
         ),
         const SizedBox(width: 4),
-        Flexible(
+        Expanded(
           child: Text(
             widget.post.location,
             style: const TextStyle(
