@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:provider/provider.dart';
 import '../core/constants/app_colors.dart';
 import '../models/post_model.dart';
+import '../providers/feed_provider.dart';
+import 'comments_bottom_sheet.dart';
 
 class PostActionBar extends StatelessWidget {
   final PostModel post;
 
   const PostActionBar({super.key, required this.post});
+
+  void _showComments(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => CommentsBottomSheet(post: post),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +27,20 @@ class PostActionBar extends StatelessWidget {
       children: [
         Row(
           children: [
-            _buildActionIcon(Icons.favorite_border, post.likes.toString()),
+            _buildActionIcon(
+              post.isLiked ? Icons.favorite : Icons.favorite_border,
+              post.likes.toString(),
+              color: post.isLiked ? Colors.red : AppColors.textLight,
+              onTap: () {
+                context.read<FeedProvider>().toggleLike(post.id);
+              },
+            ),
             const SizedBox(width: 16),
-            _buildActionIcon(Icons.chat_bubble_outline, post.comments.toString()),
+            _buildActionIcon(
+              Icons.chat_bubble_outline,
+              post.comments.toString(),
+              onTap: () => _showComments(context),
+            ),
             const SizedBox(width: 16),
             const Icon(Icons.send_outlined, color: AppColors.textLight, size: 20),
             const Spacer(),
@@ -71,19 +94,23 @@ class PostActionBar extends StatelessWidget {
     );
   }
 
-  Widget _buildActionIcon(IconData icon, String count) {
-    return Row(
-      children: [
-        Icon(icon, color: AppColors.textLight, size: 20),
-        const SizedBox(width: 4),
-        Text(
-          count,
-          style: const TextStyle(
-            color: AppColors.textLight,
-            fontSize: 14,
+  Widget _buildActionIcon(IconData icon, String count, {Color color = AppColors.textLight, VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Row(
+        children: [
+          Icon(icon, color: color, size: 20),
+          const SizedBox(width: 4),
+          Text(
+            count,
+            style: TextStyle(
+              color: color,
+              fontSize: 14,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

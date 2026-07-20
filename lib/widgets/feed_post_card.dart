@@ -6,11 +6,17 @@ import '../core/constants/app_colors.dart';
 import '../models/post_model.dart';
 import 'post_action_bar.dart';
 import 'tag_widget.dart';
+import '../screens/post_details_screen.dart';
 
 class FeedPostCard extends StatefulWidget {
   final PostModel post;
+  final bool isDetailMode;
 
-  const FeedPostCard({super.key, required this.post});
+  const FeedPostCard({
+    super.key,
+    required this.post,
+    this.isDetailMode = false,
+  });
 
   @override
   State<FeedPostCard> createState() => _FeedPostCardState();
@@ -21,37 +27,49 @@ class _FeedPostCardState extends State<FeedPostCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppColors.cardBackground,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            radius: 20,
-            backgroundImage: CachedNetworkImageProvider(
-              widget.post.userProfileUrl,
+    return GestureDetector(
+      onTap: widget.isDetailMode
+          ? null
+          : () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PostDetailsScreen(post: widget.post),
+                ),
+              );
+            },
+      child: Container(
+        color: AppColors.cardBackground,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              radius: 20,
+              backgroundImage: CachedNetworkImageProvider(
+                widget.post.userProfileUrl,
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildHeaderContent(),
-                const SizedBox(height: 10),
-                _buildContent(),
-                const SizedBox(height: 12),
-                _buildLocationAndTag(),
-                if (widget.post.mediaType != MediaType.none)
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildHeaderContent(),
+                  const SizedBox(height: 10),
+                  _buildContent(),
                   const SizedBox(height: 12),
-                _buildMedia(),
-                const SizedBox(height: 16),
-                PostActionBar(post: widget.post),
-              ],
+                  _buildLocationAndTag(),
+                  if (widget.post.mediaType != MediaType.none)
+                    const SizedBox(height: 12),
+                  _buildMedia(),
+                  const SizedBox(height: 16),
+                  PostActionBar(post: widget.post),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

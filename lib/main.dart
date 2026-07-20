@@ -2,8 +2,18 @@ import 'package:flutter/material.dart';
 import 'core/theme/app_theme.dart';
 import 'screens/main_screen.dart';
 
+import 'package:provider/provider.dart';
+import 'providers/feed_provider.dart';
+
 void main() {
-  runApp(const ExpertListingApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => FeedProvider()),
+      ],
+      child: const ExpertListingApp(),
+    ),
+  );
 }
 
 class ExpertListingApp extends StatelessWidget {
