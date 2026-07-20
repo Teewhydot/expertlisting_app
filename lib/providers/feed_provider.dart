@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/post_model.dart';
 import '../data/api_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class FeedProvider extends ChangeNotifier {
   List<PostModel> _posts = [];
@@ -12,7 +13,7 @@ class FeedProvider extends ChangeNotifier {
   bool _isLoading = true;
   bool _isLoadingMore = false;
   String? errorMessage;
-  Timer? _pollingTimer;
+  RealtimeChannel? _realtimeChannel;
   String _currentType = 'property';
 
   List<PostModel> get posts => _posts;
@@ -30,12 +31,12 @@ class FeedProvider extends ChangeNotifier {
   Future<void> _init() async {
     await _loadCachedPosts();
     await fetchInitialPosts();
-    _startPolling();
+    _startRealtimeListener();
   }
 
   @override
   void dispose() {
-    _pollingTimer?.cancel();
+    _realtimeChannel?.unsubscribe();
     super.dispose();
   }
 
@@ -128,46 +129,72 @@ class FeedProvider extends ChangeNotifier {
     }
   }
 
-  void _startPolling() {
-    _pollingTimer?.cancel();
-    _pollingTimer = Timer.periodic(const Duration(seconds: 15), (timer) async {
-      if (_posts.isEmpty) return;
+  void _startRealtimeListener() {
+    _realtimeChannel?.unsubscribe();
+    _realtimeChannel = Supabase.instance.client.channel('public:db_changes');
 
-      try {
-        final data = await ApiService.getPosts(type: _currentType, limit: 5);
-        List<PostModel> latestPosts = data['posts'];
+    _realtimeChannel!
+        .onPostgresChanges(
+          event: PostgresChangeEvent.all,
+          schema: 'public',
+          table: 'posts',
+          callback: _handleRealtimePing,
+        )
+        .onPostgresChanges(
+          event: PostgresChangeEvent.all,
+          schema: 'public',
+          table: 'likes',
+          callback: _handleRealtimePing,
+        )
+        .onPostgresChanges(
+          event: PostgresChangeEvent.all,
+          schema: 'public',
+          table: 'comments',
+          callback: _handleRealtimePing,
+        )
+        .subscribe();
+  }
 
-        bool hasChanges = false;
-        for (var post in latestPosts) {
-          int indexInMain = _posts.indexWhere((p) => p.id == post.id);
-          if (indexInMain == -1) {
-            bool existsInCache = _newPostsCache.any((p) => p.id == post.id);
-            if (!existsInCache) {
-              _newPostsCache.add(post);
-              hasChanges = true;
-            }
-          } else {
-            // Reconcile stats for existing posts in the feed
-            PostModel existingPost = _posts[indexInMain];
-            if (existingPost.likes != post.likes ||
-                existingPost.comments != post.comments) {
-              _posts[indexInMain] = existingPost.copyWith(
-                likes: post.likes,
-                comments: post.comments,
-                // We leave local 'isLiked' alone so we don't accidentally overwrite optimistic likes
-              );
-              hasChanges = true;
-            }
+  Future<void> _handleRealtimePing(PostgresChangePayload payload) async {
+    if (_posts.isEmpty) return;
+
+    try {
+      // Trigger a silent fetch of the latest 5 posts from our backend.
+      // This retrieves the fully hydrated JSON (including joined names and counts)
+      // without needing to rewrite complex joining logic on the frontend.
+      final data = await ApiService.getPosts(type: _currentType, limit: 5);
+      List<PostModel> latestPosts = data['posts'];
+
+      bool hasChanges = false;
+      for (var post in latestPosts) {
+        int indexInMain = _posts.indexWhere((p) => p.id == post.id);
+        if (indexInMain == -1) {
+          bool existsInCache = _newPostsCache.any((p) => p.id == post.id);
+          if (!existsInCache) {
+            _newPostsCache.add(post);
+            hasChanges = true;
+          }
+        } else {
+          // Reconcile stats for existing posts in the feed
+          PostModel existingPost = _posts[indexInMain];
+          if (existingPost.likes != post.likes ||
+              existingPost.comments != post.comments) {
+            _posts[indexInMain] = existingPost.copyWith(
+              likes: post.likes,
+              comments: post.comments,
+              // We leave local 'isLiked' alone so we don't accidentally overwrite optimistic likes
+            );
+            hasChanges = true;
           }
         }
-
-        if (hasChanges) {
-          notifyListeners();
-        }
-      } catch (e) {
-        debugPrint('Polling error: $e');
       }
-    });
+
+      if (hasChanges) {
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('Realtime ping fetch error: $e');
+    }
   }
 
   void commitNewPosts() {
