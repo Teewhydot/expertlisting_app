@@ -16,6 +16,9 @@ class FeedProvider extends ChangeNotifier {
   RealtimeChannel? _realtimeChannel;
   String _currentType = 'property';
 
+  int _pendingPingsCount = 0;
+  Timer? _throttleTimer;
+
   List<PostModel> get posts => _posts;
   List<PostModel> get newPostsCache => _newPostsCache;
   bool get isLoading => _isLoading;
@@ -38,6 +41,7 @@ class FeedProvider extends ChangeNotifier {
   @override
   void dispose() {
     _realtimeChannel?.unsubscribe();
+    _throttleTimer?.cancel();
     super.dispose();
   }
 
@@ -159,42 +163,83 @@ class FeedProvider extends ChangeNotifier {
   Future<void> _handleRealtimePing(PostgresChangePayload payload) async {
     if (_posts.isEmpty) return;
 
+    if (payload.table == 'posts' &&
+        payload.eventType == PostgresChangeEvent.insert) {
+      _pendingPingsCount++;
+      // Start the 15-second timer on the first ping
+      if (_throttleTimer == null || !_throttleTimer!.isActive) {
+        _throttleTimer = Timer(const Duration(seconds: 15), () {
+          _fetchDebouncedPosts();
+        });
+      }
+    } else {
+      // For likes and comments, we just fetch the top 10 silently to reconcile stats
+      _reconcileStats();
+    }
+  }
+
+  Future<void> _fetchDebouncedPosts() async {
+    if (_pendingPingsCount <= 1) {
+      // Don't fire if count is 1 or 0
+      // We leave the count as is. Next ping will make it > 1 and start a new timer.
+      return;
+    }
+
+    int limitToFetch = _pendingPingsCount;
+    // We add the current cache length to ensure we don't miss new posts if some are already cached
+    limitToFetch += _newPostsCache.length;
+
+    _pendingPingsCount = 0; // Snapshot taken, reset counter for next burst
+
     try {
-      // Trigger a silent fetch of the latest 5 posts from our backend.
-      // This retrieves the fully hydrated JSON (including joined names and counts)
-      // without needing to rewrite complex joining logic on the frontend.
-      final data = await ApiService.getPosts(type: _currentType, limit: 5);
+      final data = await ApiService.getPosts(
+        type: _currentType,
+        limit: limitToFetch,
+      );
       List<PostModel> latestPosts = data['posts'];
 
       bool hasChanges = false;
       for (var post in latestPosts) {
-        int indexInMain = _posts.indexWhere((p) => p.id == post.id);
-        if (indexInMain == -1) {
-          bool existsInCache = _newPostsCache.any((p) => p.id == post.id);
-          if (!existsInCache) {
+        // If it's not in the main feed
+        if (_posts.indexWhere((p) => p.id == post.id) == -1) {
+          // And not already in the cache
+          if (!_newPostsCache.any((p) => p.id == post.id)) {
             _newPostsCache.add(post);
             hasChanges = true;
           }
-        } else {
-          // Reconcile stats for existing posts in the feed
+        }
+      }
+
+      if (hasChanges) notifyListeners();
+    } catch (e) {
+      debugPrint('Debounced fetch error: $e');
+    }
+  }
+
+  Future<void> _reconcileStats() async {
+    try {
+      final data = await ApiService.getPosts(type: _currentType, limit: 10);
+      List<PostModel> latestPosts = data['posts'];
+      bool hasChanges = false;
+
+      for (var post in latestPosts) {
+        int indexInMain = _posts.indexWhere((p) => p.id == post.id);
+        if (indexInMain != -1) {
           PostModel existingPost = _posts[indexInMain];
           if (existingPost.likes != post.likes ||
               existingPost.comments != post.comments) {
             _posts[indexInMain] = existingPost.copyWith(
               likes: post.likes,
               comments: post.comments,
-              // We leave local 'isLiked' alone so we don't accidentally overwrite optimistic likes
             );
             hasChanges = true;
           }
         }
       }
 
-      if (hasChanges) {
-        notifyListeners();
-      }
+      if (hasChanges) notifyListeners();
     } catch (e) {
-      debugPrint('Realtime ping fetch error: $e');
+      debugPrint('Reconcile stats error: $e');
     }
   }
 
