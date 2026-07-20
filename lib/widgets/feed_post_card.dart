@@ -24,34 +24,42 @@ class _FeedPostCardState extends State<FeedPostCard> {
     return Container(
       color: AppColors.cardBackground,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      child: Column(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildHeader(),
-          const SizedBox(height: 10),
-          _buildContent(),
-          const SizedBox(height: 12),
-          _buildLocationAndTag(),
-          if (widget.post.mediaType != MediaType.none)
-            const SizedBox(height: 12),
-          _buildMedia(),
-          const SizedBox(height: 16),
-          PostActionBar(post: widget.post),
+          CircleAvatar(
+            radius: 20,
+            backgroundImage: CachedNetworkImageProvider(
+              widget.post.userProfileUrl,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeaderContent(),
+                const SizedBox(height: 10),
+                _buildContent(),
+                const SizedBox(height: 12),
+                _buildLocationAndTag(),
+                if (widget.post.mediaType != MediaType.none)
+                  const SizedBox(height: 12),
+                _buildMedia(),
+                const SizedBox(height: 16),
+                PostActionBar(post: widget.post),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeaderContent() {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CircleAvatar(
-          radius: 20,
-          backgroundImage: CachedNetworkImageProvider(
-            widget.post.userProfileUrl,
-          ),
-        ),
-        const SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,9 +128,14 @@ class _FeedPostCardState extends State<FeedPostCard> {
             ],
           ),
         ),
-        IconButton(
-          icon: const Icon(Icons.more_horiz, color: AppColors.textGrey),
-          onPressed: () {},
+        SizedBox(
+          height: 24,
+          width: 24,
+          child: IconButton(
+            padding: EdgeInsets.zero,
+            icon: const Icon(Icons.more_horiz, color: AppColors.textGrey),
+            onPressed: () {},
+          ),
         ),
       ],
     );
@@ -269,14 +282,21 @@ class _FeedPostCardState extends State<FeedPostCard> {
                     child: CircleAvatar(
                       backgroundColor: Colors.black.withValues(alpha: 0.3),
                       radius: 24,
-                      child: const Icon(Icons.play_arrow, color: Colors.white, size: 32),
+                      child: const Icon(
+                        Icons.play_arrow,
+                        color: Colors.white,
+                        size: 32,
+                      ),
                     ),
                   ),
                   Positioned(
                     bottom: 12,
                     left: 12,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.black.withValues(alpha: 0.6),
                         borderRadius: BorderRadius.circular(12),
@@ -284,11 +304,19 @@ class _FeedPostCardState extends State<FeedPostCard> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.play_arrow, color: Colors.white, size: 16),
+                          const Icon(
+                            Icons.play_arrow,
+                            color: Colors.white,
+                            size: 16,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             widget.post.videoDuration ?? '',
-                            style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ],
                       ),
