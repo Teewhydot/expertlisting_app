@@ -246,62 +246,70 @@ class _FeedPostCardState extends State<FeedPostCard> {
       );
     }
 
-    // For single image or video
-    return Stack(
-      children: [
-        if (widget.post.mediaType == MediaType.video)
-          Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 52.0),
-              child: SizedBox(
-                height: 400,
-                child: AspectRatio(
-                  aspectRatio: 9 / 16,
-                  child: ClipRRect(
+    if (widget.post.mediaType == MediaType.video) {
+      return Align(
+        alignment: Alignment.centerRight,
+        child: Padding(
+          padding: const EdgeInsets.only(right: 52.0),
+          child: SizedBox(
+            height: 400,
+            child: AspectRatio(
+              aspectRatio: 9 / 16,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: CachedNetworkImage(
                       imageUrl: widget.post.mediaUrls!.first,
                       fit: BoxFit.cover,
                     ),
                   ),
-                ),
-              ),
-            ),
-          )
-        else
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: CachedNetworkImage(
-              imageUrl: widget.post.mediaUrls!.first,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-        if (widget.post.mediaType == MediaType.video)
-          Positioned(
-            bottom: 12,
-            left: 12,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.6),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.play_arrow, color: Colors.white, size: 16),
-                  const SizedBox(width: 4),
-                  Text(
-                    widget.post.videoDuration ?? '',
-                    style: const TextStyle(color: Colors.white, fontSize: 12),
+                  Center(
+                    child: CircleAvatar(
+                      backgroundColor: Colors.black.withValues(alpha: 0.3),
+                      radius: 24,
+                      child: const Icon(Icons.play_arrow, color: Colors.white, size: 32),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 12,
+                    left: 12,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.6),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.play_arrow, color: Colors.white, size: 16),
+                          const SizedBox(width: 4),
+                          Text(
+                            widget.post.videoDuration ?? '',
+                            style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
           ),
-      ],
+        ),
+      );
+    }
+
+    // For single image
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: CachedNetworkImage(
+        imageUrl: widget.post.mediaUrls!.first,
+        width: double.infinity,
+        fit: BoxFit.cover,
+      ),
     );
   }
 }
