@@ -245,27 +245,35 @@ class _FeedPostCardState extends State<FeedPostCard> {
         ],
       );
     }
-
     // For single image or video
     return Stack(
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: widget.post.mediaType == MediaType.video
-              ? AspectRatio(
-                  aspectRatio: 9 / 16,
+        if (widget.post.mediaType == MediaType.video)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: SizedBox(
+              height: 400,
+              child: AspectRatio(
+                aspectRatio: 9 / 16,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
                   child: CachedNetworkImage(
                     imageUrl: widget.post.mediaUrls!.first,
-                    width: double.infinity,
                     fit: BoxFit.cover,
                   ),
-                )
-              : CachedNetworkImage(
-                  imageUrl: widget.post.mediaUrls!.first,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
                 ),
-        ),
+              ),
+            ),
+          )
+        else
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: CachedNetworkImage(
+              imageUrl: widget.post.mediaUrls!.first,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
         if (widget.post.mediaType == MediaType.video)
           Positioned(
             bottom: 12,
