@@ -80,12 +80,12 @@ flutter:
   fonts:
     - family: OpenRunde
       fonts:
-        - asset: assets/fonts/OpenRunde-Regular.ttf
-        - asset: assets/fonts/OpenRunde-Medium.ttf
+        - asset: assets/fonts/OpenRunde-Regular.otf
+        - asset: assets/fonts/OpenRunde-Medium.otf
           weight: 500
-        - asset: assets/fonts/OpenRunde-Semibold.ttf
+        - asset: assets/fonts/OpenRunde-Semibold.otf
           weight: 600
-        - asset: assets/fonts/OpenRunde-Bold.ttf
+        - asset: assets/fonts/OpenRunde-Bold.otf
           weight: 700
   #
   # For details regarding fonts from package dependencies,
