@@ -145,7 +145,7 @@ class _FeedScreenState extends State<FeedScreen> {
               // New Postings Popup
               if (provider.newPostsCache.isNotEmpty)
                 Positioned(
-                  top: 16,
+                  top: 110,
                   left: 0,
                   right: 0,
                   child: Center(
