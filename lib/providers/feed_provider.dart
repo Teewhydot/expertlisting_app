@@ -137,17 +137,30 @@ class FeedProvider extends ChangeNotifier {
         final data = await ApiService.getPosts(type: _currentType, limit: 5);
         List<PostModel> latestPosts = data['posts'];
 
-        bool hasNew = false;
+        bool hasChanges = false;
         for (var post in latestPosts) {
-          bool existsInMain = _posts.any((p) => p.id == post.id);
-          bool existsInCache = _newPostsCache.any((p) => p.id == post.id);
-          if (!existsInMain && !existsInCache) {
-            _newPostsCache.add(post);
-            hasNew = true;
+          int indexInMain = _posts.indexWhere((p) => p.id == post.id);
+          if (indexInMain == -1) {
+            bool existsInCache = _newPostsCache.any((p) => p.id == post.id);
+            if (!existsInCache) {
+              _newPostsCache.add(post);
+              hasChanges = true;
+            }
+          } else {
+            // Reconcile stats for existing posts in the feed
+            PostModel existingPost = _posts[indexInMain];
+            if (existingPost.likes != post.likes || existingPost.comments != post.comments) {
+              _posts[indexInMain] = existingPost.copyWith(
+                likes: post.likes,
+                comments: post.comments,
+                // We leave local 'isLiked' alone so we don't accidentally overwrite optimistic likes
+              );
+              hasChanges = true;
+            }
           }
         }
 
-        if (hasNew) {
+        if (hasChanges) {
           notifyListeners();
         }
       } catch (e) {
