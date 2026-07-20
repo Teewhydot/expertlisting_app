@@ -3,8 +3,11 @@ import 'package:provider/provider.dart';
 import '../providers/feed_provider.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/feed_post_card.dart';
-import '../widgets/shimmer_story_list.dart';
 import '../widgets/shimmer_post_card.dart';
+import '../widgets/story_list.dart';
+import '../widgets/shimmer_story_list.dart';
+import '../models/story_model.dart';
+import '../core/constants/app_colors.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});
@@ -15,6 +18,35 @@ class FeedScreen extends StatefulWidget {
 
 class _FeedScreenState extends State<FeedScreen> {
   final ScrollController _scrollController = ScrollController();
+
+  final List<StoryModel> _mockStories = [
+    StoryModel(
+      id: '1',
+      userName: 'Your Story',
+      profileUrl: 'https://i.pravatar.cc/150?img=11',
+      hasUnviewedStory: false,
+    ),
+    StoryModel(
+      id: '2',
+      userName: 'Sarah',
+      profileUrl: 'https://i.pravatar.cc/150?img=5',
+    ),
+    StoryModel(
+      id: '3',
+      userName: 'Mike',
+      profileUrl: 'https://i.pravatar.cc/150?img=8',
+    ),
+    StoryModel(
+      id: '4',
+      userName: 'Emma',
+      profileUrl: 'https://i.pravatar.cc/150?img=9',
+    ),
+    StoryModel(
+      id: '5',
+      userName: 'John',
+      profileUrl: 'https://i.pravatar.cc/150?img=12',
+    ),
+  ];
 
   @override
   void initState() {
@@ -83,15 +115,19 @@ class _FeedScreenState extends State<FeedScreen> {
                 child: ListView.separated(
                   controller: _scrollController,
                   itemCount: (provider.isLoading && provider.posts.isEmpty)
-                      ? 3 // 3 shimmer posts
-                      : provider.posts.length + 1, // +1 for loading indicator
+                      ? 4 // 1 shimmer story list + 3 shimmer posts
+                      : provider.posts.length +
+                            2, // +1 for stories, +1 for loading indicator
                   separatorBuilder: (context, index) => const Divider(),
                   itemBuilder: (context, index) {
                     if (provider.isLoading && provider.posts.isEmpty) {
+                      if (index == 0) return const ShimmerStoryList();
                       return const ShimmerPostCard();
                     }
 
-                    if (index == provider.posts.length) {
+                    if (index == 0) return StoryList(stories: _mockStories);
+
+                    if (index == provider.posts.length + 1) {
                       return provider.isLoadingMore
                           ? const Padding(
                               padding: EdgeInsets.all(16.0),
@@ -100,7 +136,7 @@ class _FeedScreenState extends State<FeedScreen> {
                           : const SizedBox.shrink();
                     }
 
-                    final post = provider.posts[index];
+                    final post = provider.posts[index - 1];
                     return FeedPostCard(post: post);
                   },
                 ),
