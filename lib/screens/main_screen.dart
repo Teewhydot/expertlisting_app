@@ -36,8 +36,13 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _screens[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
             _currentIndex = index;
@@ -70,6 +75,7 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Profile',
           ),
         ],
+      ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
