@@ -96,7 +96,10 @@ class _PostHeader extends StatelessWidget {
                   const SizedBox(width: 4),
                   const Text(
                     '•',
-                    style: TextStyle(color: AppColors.textGrey, fontSize: 14),
+                    style: TextStyle(
+                      color: Color.fromRGBO(138, 138, 138, 0.8),
+                      fontSize: 14,
+                    ),
                   ),
                   const SizedBox(width: 4),
                   Flexible(
@@ -126,7 +129,10 @@ class _PostHeader extends StatelessWidget {
                   const SizedBox(width: 4),
                   const Text(
                     '•',
-                    style: TextStyle(color: AppColors.textGrey, fontSize: 12),
+                    style: TextStyle(
+                      color: Color.fromRGBO(138, 138, 138, 0.8),
+                      fontSize: 12,
+                    ),
                   ),
                   const SizedBox(width: 4),
                   Flexible(

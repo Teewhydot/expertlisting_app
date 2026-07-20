@@ -18,6 +18,7 @@ class FeedProvider extends ChangeNotifier {
 
   int _pendingPingsCount = 0;
   Timer? _throttleTimer;
+  Timer? _reconcileTimer;
 
   List<PostModel> get posts => _posts;
   List<PostModel> get newPostsCache => _newPostsCache;
@@ -173,8 +174,11 @@ class FeedProvider extends ChangeNotifier {
         });
       }
     } else {
-      // For likes and comments, we just fetch the top 10 silently to reconcile stats
-      _reconcileStats();
+      // Debounce likes and comments updates to prevent API spam
+      _reconcileTimer?.cancel();
+      _reconcileTimer = Timer(const Duration(seconds: 2), () {
+        _reconcileStats();
+      });
     }
   }
 

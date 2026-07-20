@@ -33,28 +33,43 @@ class PostActionBar extends StatelessWidget {
         Row(
           children: [
             ActionIconWidget(
-              icon: post.isLiked ? Icons.favorite : Icons.favorite_border,
+              iconWidget: Icon(
+                post.isLiked ? Icons.favorite : Icons.favorite_border,
+                color: post.isLiked ? Colors.red : AppColors.textLight,
+                key: ValueKey<String>('like_${post.isLiked}'),
+                size: 20,
+              ),
               count: post.likes.toString(),
-              color: post.isLiked ? Colors.red : AppColors.textLight,
               onTap: () {
                 context.read<FeedProvider>().toggleLike(post.id);
               },
             ),
             const SizedBox(width: 16),
             ActionIconWidget(
-              icon: Icons.chat_bubble_outline,
+              iconWidget: Image.asset(
+                'assets/icons/comment.png',
+                width: 20,
+                height: 20,
+                color: AppColors.textLight,
+              ),
               count: post.comments.toString(),
               onTap: isDetailMode ? null : () => _showComments(context),
             ),
             const SizedBox(width: 16),
-            const Icon(
-              Icons.send_outlined,
+            Image.asset(
+              'assets/icons/arrow_right.png',
+              width: 20,
+              height: 20,
               color: AppColors.textLight,
-              size: 20,
             ),
             const Spacer(),
             ActionIconWidget(
-              icon: Icons.bookmark_border,
+              iconWidget: Image.asset(
+                'assets/icons/bookmarrk.png',
+                width: 20,
+                height: 20,
+                color: AppColors.textLight,
+              ),
               count: post.bookmarks.toString(),
             ),
           ],
@@ -113,16 +128,14 @@ class PostActionBar extends StatelessWidget {
 }
 
 class ActionIconWidget extends StatelessWidget {
-  final IconData icon;
+  final Widget iconWidget;
   final String count;
-  final Color color;
   final VoidCallback? onTap;
 
   const ActionIconWidget({
     super.key,
-    required this.icon,
+    required this.iconWidget,
     required this.count,
-    this.color = AppColors.textLight,
     this.onTap,
   });
 
@@ -138,12 +151,7 @@ class ActionIconWidget extends StatelessWidget {
             transitionBuilder: (child, animation) {
               return ScaleTransition(scale: animation, child: child);
             },
-            child: Icon(
-              icon,
-              key: ValueKey<String>('${icon.codePoint}_$color'),
-              color: color,
-              size: 20,
-            ),
+            child: iconWidget,
           ),
           const SizedBox(width: 4),
           AnimatedSwitcher(
@@ -163,7 +171,7 @@ class ActionIconWidget extends StatelessWidget {
             child: Text(
               count,
               key: ValueKey<String>(count),
-              style: TextStyle(color: color, fontSize: 14),
+              style: const TextStyle(color: AppColors.textLight, fontSize: 14),
             ),
           ),
         ],
