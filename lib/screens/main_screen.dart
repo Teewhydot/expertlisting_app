@@ -21,17 +21,6 @@ class _MainScreenState extends State<MainScreen> {
     const Center(child: Text('Profile')),
   ];
 
-  Widget _buildIcon(String asset, {bool isActive = false}) {
-    return SvgPicture.asset(
-      asset,
-      width: 24,
-      height: 24,
-      colorFilter: isActive 
-        ? const ColorFilter.mode(AppColors.primaryGreen, BlendMode.srcIn)
-        : const ColorFilter.mode(AppColors.textGrey, BlendMode.srcIn),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,39 +32,54 @@ class _MainScreenState extends State<MainScreen> {
         ),
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: _buildIcon('assets/icons/feed.svg'),
-            activeIcon: _buildIcon('assets/icons/feed.svg', isActive: true),
-            label: 'Feed',
-          ),
-          BottomNavigationBarItem(
-            icon: _buildIcon('assets/icons/search.svg'),
-            activeIcon: _buildIcon('assets/icons/search.svg', isActive: true),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: _buildIcon('assets/icons/list.svg'),
-            activeIcon: _buildIcon('assets/icons/list.svg', isActive: true),
-            label: 'List',
-          ),
-          BottomNavigationBarItem(
-            icon: _buildIcon('assets/icons/notification.svg'),
-            activeIcon: _buildIcon('assets/icons/notification.svg', isActive: true),
-            label: 'Notification',
-          ),
-          BottomNavigationBarItem(
-            icon: _buildIcon('assets/icons/profile.svg'),
-            activeIcon: _buildIcon('assets/icons/profile.svg', isActive: true),
-            label: 'Profile',
-          ),
-        ],
-      ),
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          items: const [
+            BottomNavigationBarItem(
+              icon: BottomNavIcon(asset: 'assets/icons/feed.svg'),
+              activeIcon: BottomNavIcon(
+                asset: 'assets/icons/feed.svg',
+                isActive: true,
+              ),
+              label: 'Feed',
+            ),
+            BottomNavigationBarItem(
+              icon: BottomNavIcon(asset: 'assets/icons/search.svg'),
+              activeIcon: BottomNavIcon(
+                asset: 'assets/icons/search.svg',
+                isActive: true,
+              ),
+              label: 'Search',
+            ),
+            BottomNavigationBarItem(
+              icon: BottomNavIcon(asset: 'assets/icons/list.svg'),
+              activeIcon: BottomNavIcon(
+                asset: 'assets/icons/list.svg',
+                isActive: true,
+              ),
+              label: 'List',
+            ),
+            BottomNavigationBarItem(
+              icon: BottomNavIcon(asset: 'assets/icons/notification.svg'),
+              activeIcon: BottomNavIcon(
+                asset: 'assets/icons/notification.svg',
+                isActive: true,
+              ),
+              label: 'Notification',
+            ),
+            BottomNavigationBarItem(
+              icon: BottomNavIcon(asset: 'assets/icons/profile.svg'),
+              activeIcon: BottomNavIcon(
+                asset: 'assets/icons/profile.svg',
+                isActive: true,
+              ),
+              label: 'Profile',
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
@@ -83,6 +87,25 @@ class _MainScreenState extends State<MainScreen> {
         shape: const CircleBorder(),
         child: const Icon(Icons.add, color: Colors.white),
       ),
+    );
+  }
+}
+
+class BottomNavIcon extends StatelessWidget {
+  final String asset;
+  final bool isActive;
+
+  const BottomNavIcon({super.key, required this.asset, this.isActive = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return SvgPicture.asset(
+      asset,
+      width: 24,
+      height: 24,
+      colorFilter: isActive
+          ? const ColorFilter.mode(AppColors.primaryGreen, BlendMode.srcIn)
+          : const ColorFilter.mode(AppColors.textGrey, BlendMode.srcIn),
     );
   }
 }

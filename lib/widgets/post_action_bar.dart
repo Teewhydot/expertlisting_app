@@ -32,18 +32,18 @@ class PostActionBar extends StatelessWidget {
       children: [
         Row(
           children: [
-            _buildActionIcon(
-              post.isLiked ? Icons.favorite : Icons.favorite_border,
-              post.likes.toString(),
+            ActionIconWidget(
+              icon: post.isLiked ? Icons.favorite : Icons.favorite_border,
+              count: post.likes.toString(),
               color: post.isLiked ? Colors.red : AppColors.textLight,
               onTap: () {
                 context.read<FeedProvider>().toggleLike(post.id);
               },
             ),
             const SizedBox(width: 16),
-            _buildActionIcon(
-              Icons.chat_bubble_outline,
-              post.comments.toString(),
+            ActionIconWidget(
+              icon: Icons.chat_bubble_outline,
+              count: post.comments.toString(),
               onTap: isDetailMode ? null : () => _showComments(context),
             ),
             const SizedBox(width: 16),
@@ -53,7 +53,10 @@ class PostActionBar extends StatelessWidget {
               size: 20,
             ),
             const Spacer(),
-            _buildActionIcon(Icons.bookmark_border, post.bookmarks.toString()),
+            ActionIconWidget(
+              icon: Icons.bookmark_border,
+              count: post.bookmarks.toString(),
+            ),
           ],
         ),
         const SizedBox(height: 12),
@@ -102,13 +105,24 @@ class PostActionBar extends StatelessWidget {
       ],
     );
   }
+}
 
-  Widget _buildActionIcon(
-    IconData icon,
-    String count, {
-    Color color = AppColors.textLight,
-    VoidCallback? onTap,
-  }) {
+class ActionIconWidget extends StatelessWidget {
+  final IconData icon;
+  final String count;
+  final Color color;
+  final VoidCallback? onTap;
+
+  const ActionIconWidget({
+    super.key,
+    required this.icon,
+    required this.count,
+    this.color = AppColors.textLight,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,

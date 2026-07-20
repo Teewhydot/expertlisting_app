@@ -13,7 +13,6 @@ class ShimmerPostCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Avatar
           Shimmer.fromColors(
             baseColor: AppColors.background,
             highlightColor: AppColors.cardBackground,
@@ -31,7 +30,6 @@ class ShimmerPostCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header (Name & Role, Category & Time)
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -40,94 +38,105 @@ class ShimmerPostCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
-                            children: [
-                              _buildShimmerBox(width: 100, height: 14),
-                              const SizedBox(width: 4),
-                              const Text('•', style: TextStyle(color: AppColors.textGrey, fontSize: 14)),
-                              const SizedBox(width: 4),
-                              _buildShimmerBox(width: 80, height: 14),
+                            children: const [
+                              ShimmerBoxWidget(width: 100, height: 14),
+                              SizedBox(width: 4),
+                              Text(
+                                '•',
+                                style: TextStyle(
+                                  color: AppColors.textGrey,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              SizedBox(width: 4),
+                              ShimmerBoxWidget(width: 80, height: 14),
                             ],
                           ),
                           const SizedBox(height: 6),
                           Row(
-                            children: [
-                              _buildShimmerBox(width: 60, height: 12),
-                              const SizedBox(width: 4),
-                              const Text('•', style: TextStyle(color: AppColors.textGrey, fontSize: 12)),
-                              const SizedBox(width: 4),
-                              _buildShimmerBox(width: 50, height: 12),
+                            children: const [
+                              ShimmerBoxWidget(width: 60, height: 12),
+                              SizedBox(width: 4),
+                              Text(
+                                '•',
+                                style: TextStyle(
+                                  color: AppColors.textGrey,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              SizedBox(width: 4),
+                              ShimmerBoxWidget(width: 50, height: 12),
                             ],
                           ),
                         ],
                       ),
                     ),
                     const SizedBox(width: 8),
-                    _buildShimmerBox(width: 24, height: 24), // more_horiz
+                    const ShimmerBoxWidget(width: 24, height: 24),
                   ],
                 ),
                 const SizedBox(height: 10),
-                
-                // Content lines
-                _buildShimmerBox(width: double.infinity, height: 14),
+                const ShimmerBoxWidget(width: double.infinity, height: 14),
                 const SizedBox(height: 6),
-                _buildShimmerBox(width: double.infinity, height: 14),
+                const ShimmerBoxWidget(width: double.infinity, height: 14),
                 const SizedBox(height: 6),
-                _buildShimmerBox(width: 180, height: 14),
-                
+                const ShimmerBoxWidget(width: 180, height: 14),
                 const SizedBox(height: 12),
-                
-                // Location & Tag
                 Row(
-                  children: [
-                    _buildShimmerBox(width: 16, height: 16), // Location icon
-                    const SizedBox(width: 4),
-                    _buildShimmerBox(width: 80, height: 12), // Location text
-                    const SizedBox(width: 8),
-                    _buildShimmerBox(width: 60, height: 20), // Tag bubble
+                  children: const [
+                    ShimmerBoxWidget(width: 16, height: 16),
+                    SizedBox(width: 4),
+                    ShimmerBoxWidget(width: 80, height: 12),
+                    SizedBox(width: 8),
+                    ShimmerBoxWidget(width: 60, height: 20),
                   ],
                 ),
-                
                 const SizedBox(height: 12),
-                
-                // Media Placeholder
-                _buildShimmerBox(width: double.infinity, height: 200, borderRadius: 12),
-                
+                const ShimmerBoxWidget(
+                  width: double.infinity,
+                  height: 200,
+                  borderRadius: 12,
+                ),
                 const SizedBox(height: 16),
-                
-                // Action Bar Top Row (Likes, Comments, Share, Bookmark)
                 Row(
-                  children: [
-                    _buildActionIconPlaceholder(),
-                    const SizedBox(width: 16),
-                    _buildActionIconPlaceholder(),
-                    const SizedBox(width: 16),
-                    _buildShimmerBox(width: 20, height: 20), // share
-                    const Spacer(),
-                    _buildActionIconPlaceholder(), // bookmark
+                  children: const [
+                    _ActionIconPlaceholder(),
+                    SizedBox(width: 16),
+                    _ActionIconPlaceholder(),
+                    SizedBox(width: 16),
+                    ShimmerBoxWidget(width: 20, height: 20),
+                    Spacer(),
+                    _ActionIconPlaceholder(),
                   ],
                 ),
-                
                 const SizedBox(height: 12),
-                
-                // Action Bar Bottom Row (Liked By avatars)
                 Row(
                   children: [
                     SizedBox(
                       width: 50,
                       height: 20,
                       child: Stack(
-                        children: [
-                          Positioned(left: 0, child: _buildShimmerCircle(16)),
-                          Positioned(left: 12, child: _buildShimmerCircle(16)),
-                          Positioned(left: 24, child: _buildShimmerCircle(16)),
+                        children: const [
+                          Positioned(
+                            left: 0,
+                            child: ShimmerCircleWidget(size: 16),
+                          ),
+                          Positioned(
+                            left: 12,
+                            child: ShimmerCircleWidget(size: 16),
+                          ),
+                          Positioned(
+                            left: 24,
+                            child: ShimmerCircleWidget(size: 16),
+                          ),
                         ],
                       ),
                     ),
-                    Expanded(
-                      child: _buildShimmerBox(width: 150, height: 12),
+                    const Expanded(
+                      child: ShimmerBoxWidget(width: 150, height: 12),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),
@@ -135,18 +144,37 @@ class ShimmerPostCard extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildActionIconPlaceholder() {
+class _ActionIconPlaceholder extends StatelessWidget {
+  const _ActionIconPlaceholder();
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
-      children: [
-        _buildShimmerBox(width: 20, height: 20),
-        const SizedBox(width: 4),
-        _buildShimmerBox(width: 24, height: 14),
+      children: const [
+        ShimmerBoxWidget(width: 20, height: 20),
+        SizedBox(width: 4),
+        ShimmerBoxWidget(width: 24, height: 14),
       ],
     );
   }
+}
 
-  Widget _buildShimmerBox({required double width, required double height, double borderRadius = 4}) {
+class ShimmerBoxWidget extends StatelessWidget {
+  final double width;
+  final double height;
+  final double borderRadius;
+
+  const ShimmerBoxWidget({
+    super.key,
+    required this.width,
+    required this.height,
+    this.borderRadius = 4,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Shimmer.fromColors(
       baseColor: AppColors.background,
       highlightColor: AppColors.cardBackground,
@@ -160,8 +188,15 @@ class ShimmerPostCard extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildShimmerCircle(double size) {
+class ShimmerCircleWidget extends StatelessWidget {
+  final double size;
+
+  const ShimmerCircleWidget({super.key, required this.size});
+
+  @override
+  Widget build(BuildContext context) {
     return Shimmer.fromColors(
       baseColor: AppColors.background,
       highlightColor: AppColors.cardBackground,

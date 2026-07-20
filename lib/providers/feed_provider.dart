@@ -149,7 +149,8 @@ class FeedProvider extends ChangeNotifier {
           } else {
             // Reconcile stats for existing posts in the feed
             PostModel existingPost = _posts[indexInMain];
-            if (existingPost.likes != post.likes || existingPost.comments != post.comments) {
+            if (existingPost.likes != post.likes ||
+                existingPost.comments != post.comments) {
               _posts[indexInMain] = existingPost.copyWith(
                 likes: post.likes,
                 comments: post.comments,
@@ -213,7 +214,7 @@ class FeedProvider extends ChangeNotifier {
 
     PostModel p = _posts[index];
     _posts[index] = p.copyWith(comments: p.comments + 1);
-    
+
     if (index < 50) _savePostsToCache();
     notifyListeners();
   }

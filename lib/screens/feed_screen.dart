@@ -7,7 +7,6 @@ import '../widgets/shimmer_post_card.dart';
 import '../widgets/story_list.dart';
 import '../widgets/shimmer_story_list.dart';
 import '../models/story_model.dart';
-import '../core/constants/app_colors.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});
@@ -115,9 +114,8 @@ class _FeedScreenState extends State<FeedScreen> {
                 child: ListView.separated(
                   controller: _scrollController,
                   itemCount: (provider.isLoading && provider.posts.isEmpty)
-                      ? 4 // 1 shimmer story list + 3 shimmer posts
-                      : provider.posts.length +
-                            2, // +1 for stories, +1 for loading indicator
+                      ? 4
+                      : provider.posts.length + 2,
                   separatorBuilder: (context, index) => const Divider(),
                   itemBuilder: (context, index) {
                     if (provider.isLoading && provider.posts.isEmpty) {
@@ -142,7 +140,6 @@ class _FeedScreenState extends State<FeedScreen> {
                 ),
               ),
 
-              // New Postings Popup
               if (provider.newPostsCache.isNotEmpty)
                 Positioned(
                   top: 110,

@@ -7,7 +7,11 @@ class ApiService {
   static const String baseUrl = 'http://localhost:8080/api/v1';
 
   // Fetch posts with cursor pagination
-  static Future<Map<String, dynamic>> getPosts({String type = 'property', String? cursor, int limit = 10}) async {
+  static Future<Map<String, dynamic>> getPosts({
+    String type = 'property',
+    String? cursor,
+    int limit = 10,
+  }) async {
     String url = '$baseUrl/posts?type=$type&limit=$limit';
     if (cursor != null) {
       url += '&cursor=${Uri.encodeComponent(cursor)}';
@@ -19,10 +23,7 @@ class ApiService {
       List<PostModel> posts = (data['posts'] as List)
           .map((json) => PostModel.fromJson(json))
           .toList();
-      return {
-        'posts': posts,
-        'next_cursor': data['next_cursor'],
-      };
+      return {'posts': posts, 'next_cursor': data['next_cursor']};
     } else {
       throw Exception('Failed to load posts');
     }
@@ -40,7 +41,9 @@ class ApiService {
 
   // Get Comments
   static Future<List<CommentModel>> getComments(String postId) async {
-    final response = await http.get(Uri.parse('$baseUrl/posts/$postId/comments'));
+    final response = await http.get(
+      Uri.parse('$baseUrl/posts/$postId/comments'),
+    );
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       return (data['comments'] as List)

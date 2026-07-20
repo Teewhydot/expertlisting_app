@@ -89,69 +89,71 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
             child: _isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : _comments.isEmpty
-                    ? const Center(
-                        child: Text(
-                          'No comments yet. Be the first!',
-                          style: TextStyle(color: AppColors.textGrey),
+                ? const Center(
+                    child: Text(
+                      'No comments yet. Be the first!',
+                      style: TextStyle(color: AppColors.textGrey),
+                    ),
+                  )
+                : ListView.builder(
+                    itemCount: _comments.length,
+                    itemBuilder: (context, index) {
+                      final comment = _comments[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
                         ),
-                      )
-                    : ListView.builder(
-                        itemCount: _comments.length,
-                        itemBuilder: (context, index) {
-                          final comment = _comments[index];
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CircleAvatar(
-                                  radius: 16,
-                                  backgroundImage: CachedNetworkImageProvider(
-                                      comment.userAvatar),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CircleAvatar(
+                              radius: 16,
+                              backgroundImage: CachedNetworkImageProvider(
+                                comment.userAvatar,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
                                     children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            comment.userName,
-                                            style: const TextStyle(
-                                              color: AppColors.textLight,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            comment.timeAgo,
-                                            style: const TextStyle(
-                                              color: AppColors.textGrey,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 4),
                                       Text(
-                                        comment.content,
+                                        comment.userName,
                                         style: const TextStyle(
                                           color: AppColors.textLight,
+                                          fontWeight: FontWeight.bold,
                                           fontSize: 14,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        comment.timeAgo,
+                                        style: const TextStyle(
+                                          color: AppColors.textGrey,
+                                          fontSize: 12,
                                         ),
                                       ),
                                     ],
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    comment.content,
+                                    style: const TextStyle(
+                                      color: AppColors.textLight,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          );
-                        },
-                      ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
           ),
           const Divider(height: 1, color: AppColors.dividerColor),
           Padding(
@@ -177,7 +179,9 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                       filled: true,
                       fillColor: AppColors.background,
                       contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                     ),
                   ),
                 ),

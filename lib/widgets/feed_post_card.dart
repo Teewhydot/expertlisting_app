@@ -8,7 +8,7 @@ import 'post_action_bar.dart';
 import 'tag_widget.dart';
 import '../screens/post_details_screen.dart';
 
-class FeedPostCard extends StatefulWidget {
+class FeedPostCard extends StatelessWidget {
   final PostModel post;
   final bool isDetailMode;
 
@@ -19,22 +19,15 @@ class FeedPostCard extends StatefulWidget {
   });
 
   @override
-  State<FeedPostCard> createState() => _FeedPostCardState();
-}
-
-class _FeedPostCardState extends State<FeedPostCard> {
-  int _currentCarouselIndex = 0;
-
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.isDetailMode
+      onTap: isDetailMode
           ? null
           : () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PostDetailsScreen(post: widget.post),
+                  builder: (context) => PostDetailsScreen(post: post),
                 ),
               );
             },
@@ -46,28 +39,23 @@ class _FeedPostCardState extends State<FeedPostCard> {
           children: [
             CircleAvatar(
               radius: 20,
-              backgroundImage: CachedNetworkImageProvider(
-                widget.post.userProfileUrl,
-              ),
+              backgroundImage: CachedNetworkImageProvider(post.userProfileUrl),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildHeaderContent(),
+                  _PostHeader(post: post),
                   const SizedBox(height: 10),
-                  _buildContent(),
+                  _PostContentText(content: post.content),
                   const SizedBox(height: 12),
-                  _buildLocationAndTag(),
-                  if (widget.post.mediaType != MediaType.none)
+                  _PostLocationTag(post: post),
+                  if (post.mediaType != MediaType.none)
                     const SizedBox(height: 12),
-                  _buildMedia(),
+                  _PostMediaContent(post: post),
                   const SizedBox(height: 16),
-                  PostActionBar(
-                    post: widget.post,
-                    isDetailMode: widget.isDetailMode,
-                  ),
+                  PostActionBar(post: post, isDetailMode: isDetailMode),
                 ],
               ),
             ),
@@ -76,8 +64,15 @@ class _FeedPostCardState extends State<FeedPostCard> {
       ),
     );
   }
+}
 
-  Widget _buildHeaderContent() {
+class _PostHeader extends StatelessWidget {
+  final PostModel post;
+
+  const _PostHeader({required this.post});
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -89,7 +84,7 @@ class _FeedPostCardState extends State<FeedPostCard> {
                 children: [
                   Flexible(
                     child: Text(
-                      widget.post.userName,
+                      post.userName,
                       style: const TextStyle(
                         color: AppColors.textLight,
                         fontWeight: FontWeight.bold,
@@ -106,7 +101,7 @@ class _FeedPostCardState extends State<FeedPostCard> {
                   const SizedBox(width: 4),
                   Flexible(
                     child: Text(
-                      widget.post.userRole,
+                      post.userRole,
                       style: const TextStyle(
                         color: AppColors.textGrey,
                         fontSize: 14,
@@ -120,7 +115,7 @@ class _FeedPostCardState extends State<FeedPostCard> {
                 children: [
                   Flexible(
                     child: Text(
-                      widget.post.category,
+                      post.category,
                       style: const TextStyle(
                         color: AppColors.textGrey,
                         fontSize: 12,
@@ -136,7 +131,7 @@ class _FeedPostCardState extends State<FeedPostCard> {
                   const SizedBox(width: 4),
                   Flexible(
                     child: Text(
-                      widget.post.timeAgo,
+                      post.timeAgo,
                       style: const TextStyle(
                         color: AppColors.textGrey,
                         fontSize: 12,
@@ -161,10 +156,17 @@ class _FeedPostCardState extends State<FeedPostCard> {
       ],
     );
   }
+}
 
-  Widget _buildContent() {
+class _PostContentText extends StatelessWidget {
+  final String content;
+
+  const _PostContentText({required this.content});
+
+  @override
+  Widget build(BuildContext context) {
     return Text(
-      widget.post.content,
+      content,
       style: const TextStyle(
         color: AppColors.textLight,
         fontSize: 14,
@@ -172,8 +174,15 @@ class _FeedPostCardState extends State<FeedPostCard> {
       ),
     );
   }
+}
 
-  Widget _buildLocationAndTag() {
+class _PostLocationTag extends StatelessWidget {
+  final PostModel post;
+
+  const _PostLocationTag({required this.post});
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
         SvgPicture.asset(
@@ -188,20 +197,34 @@ class _FeedPostCardState extends State<FeedPostCard> {
         const SizedBox(width: 4),
         Flexible(
           child: Text(
-            widget.post.location,
+            post.location,
             style: const TextStyle(color: AppColors.textGrey, fontSize: 12),
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        if (widget.post.tagType != TagType.none) ...[
+        if (post.tagType != TagType.none) ...[
           const SizedBox(width: 8),
-          TagWidget(tagType: widget.post.tagType),
+          TagWidget(tagType: post.tagType),
         ],
       ],
     );
   }
+}
 
-  Widget _buildMedia() {
+class _PostMediaContent extends StatefulWidget {
+  final PostModel post;
+
+  const _PostMediaContent({required this.post});
+
+  @override
+  State<_PostMediaContent> createState() => _PostMediaContentState();
+}
+
+class _PostMediaContentState extends State<_PostMediaContent> {
+  int _currentCarouselIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
     if (widget.post.mediaType == MediaType.none ||
         widget.post.mediaUrls == null ||
         widget.post.mediaUrls!.isEmpty) {
@@ -240,7 +263,6 @@ class _FeedPostCardState extends State<FeedPostCard> {
                   );
                 }).toList(),
               ),
-              // Pagination arrows on the right
               if (widget.post.mediaUrls!.length > 1)
                 Padding(
                   padding: const EdgeInsets.only(right: 8.0),
@@ -351,7 +373,6 @@ class _FeedPostCardState extends State<FeedPostCard> {
       );
     }
 
-    // For single image
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: CachedNetworkImage(

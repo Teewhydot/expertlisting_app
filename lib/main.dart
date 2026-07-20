@@ -8,9 +8,7 @@ import 'providers/feed_provider.dart';
 void main() {
   runApp(
     MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => FeedProvider()),
-      ],
+      providers: [ChangeNotifierProvider(create: (_) => FeedProvider())],
       child: const ExpertListingApp(),
     ),
   );

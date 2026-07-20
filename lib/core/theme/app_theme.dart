@@ -5,7 +5,7 @@ import '../constants/app_colors.dart';
 class AppTheme {
   static ThemeData get darkTheme {
     final baseTextTheme = ThemeData.dark().textTheme;
-    
+
     return ThemeData(
       fontFamily: 'OpenRunde',
       brightness: Brightness.dark,
@@ -32,23 +32,38 @@ class AppTheme {
         unselectedItemColor: AppColors.textGrey,
         type: BottomNavigationBarType.fixed,
         elevation: 0, // Removed elevation to blend with background
-        selectedLabelStyle: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, height: 1.5),
-        unselectedLabelStyle: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, height: 1.5),
+        selectedLabelStyle: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w500,
+          height: 1.5,
+        ),
+        unselectedLabelStyle: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w500,
+          height: 1.5,
+        ),
       ),
       textTheme: baseTextTheme.copyWith(
-        bodyLarge: baseTextTheme.bodyLarge?.copyWith(color: AppColors.textLight),
-        bodyMedium: baseTextTheme.bodyMedium?.copyWith(color: AppColors.textLight),
-        titleMedium: baseTextTheme.titleMedium?.copyWith(color: AppColors.textLight, fontWeight: FontWeight.bold),
-        titleSmall: baseTextTheme.titleSmall?.copyWith(color: AppColors.textGrey),
+        bodyLarge: baseTextTheme.bodyLarge?.copyWith(
+          color: AppColors.textLight,
+        ),
+        bodyMedium: baseTextTheme.bodyMedium?.copyWith(
+          color: AppColors.textLight,
+        ),
+        titleMedium: baseTextTheme.titleMedium?.copyWith(
+          color: AppColors.textLight,
+          fontWeight: FontWeight.bold,
+        ),
+        titleSmall: baseTextTheme.titleSmall?.copyWith(
+          color: AppColors.textGrey,
+        ),
       ),
       dividerTheme: const DividerThemeData(
         color: AppColors.dividerColor,
         thickness: 1,
         space: 1,
       ),
-      iconTheme: const IconThemeData(
-        color: AppColors.textLight,
-      ),
+      iconTheme: const IconThemeData(color: AppColors.textLight),
     );
   }
 }

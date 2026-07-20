@@ -29,21 +29,25 @@ class StoryList extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: story.hasUnviewedStory 
-                          ? AppColors.primaryGreen 
+                      color: story.hasUnviewedStory
+                          ? AppColors.primaryGreen
                           : AppColors.textGrey,
                       width: 2,
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(2.0), // Gap between border and image
+                    padding: const EdgeInsets.all(
+                      2.0,
+                    ), // Gap between border and image
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(30),
                       child: CachedNetworkImage(
                         imageUrl: story.profileUrl,
                         fit: BoxFit.cover,
-                        placeholder: (context, url) => const CircularProgressIndicator(strokeWidth: 2),
-                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                        placeholder: (context, url) =>
+                            const CircularProgressIndicator(strokeWidth: 2),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
                       ),
                     ),
                   ),

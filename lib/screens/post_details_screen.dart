@@ -94,17 +94,29 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                     child: Center(child: CircularProgressIndicator()),
                   )
                 else
-                  ..._comments.map((comment) => _buildCommentItem(comment)),
+                  ..._comments.map(
+                    (comment) => CommentItemWidget(comment: comment),
+                  ),
               ],
             ),
           ),
-          _buildCommentInput(),
+          CommentInputWidget(
+            controller: _commentController,
+            onPost: _postComment,
+          ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildCommentItem(CommentModel comment) {
+class CommentItemWidget extends StatelessWidget {
+  final CommentModel comment;
+
+  const CommentItemWidget({super.key, required this.comment});
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
@@ -154,8 +166,20 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
       ),
     );
   }
+}
 
-  Widget _buildCommentInput() {
+class CommentInputWidget extends StatelessWidget {
+  final TextEditingController controller;
+  final VoidCallback onPost;
+
+  const CommentInputWidget({
+    super.key,
+    required this.controller,
+    required this.onPost,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom + 16,
@@ -171,7 +195,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
         children: [
           Expanded(
             child: TextField(
-              controller: _commentController,
+              controller: controller,
               style: const TextStyle(color: AppColors.textLight),
               decoration: InputDecoration(
                 hintText: 'Add a comment...',
@@ -191,7 +215,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
           ),
           const SizedBox(width: 8),
           IconButton(
-            onPressed: _postComment,
+            onPressed: onPost,
             icon: const Icon(Icons.send, color: AppColors.primaryGreen),
           ),
         ],

@@ -8,7 +8,7 @@ class AppColors {
   static const Color textGrey = Color(0xFF90959A); // Secondary text
   static const Color bottomNavBackground = Color(0xFF171717);
   static const Color dividerColor = Color(0xFF202327);
-  
+
   // Tag Colors
   static const Color tagForRentBg = Color(0xFF182D20);
   static const Color tagForRentText = Color(0xFF33C770);

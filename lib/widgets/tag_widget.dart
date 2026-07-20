@@ -13,15 +13,21 @@ class TagWidget extends StatelessWidget {
     if (tagType == TagType.none) return const SizedBox.shrink();
 
     final bool isRent = tagType == TagType.forRent;
-    final Color bgColor = isRent ? AppColors.tagForRentBg : AppColors.tagForSaleBg;
-    final Color textColor = isRent ? AppColors.tagForRentText : AppColors.tagForSaleText;
+    final Color bgColor = isRent
+        ? AppColors.tagForRentBg
+        : AppColors.tagForSaleBg;
+    final Color textColor = isRent
+        ? AppColors.tagForRentText
+        : AppColors.tagForSaleText;
     final String text = isRent ? 'For Rent' : 'For Sale';
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(4), // Made slightly less rounded, more pill like but tighter
+        borderRadius: BorderRadius.circular(
+          4,
+        ), // Made slightly less rounded, more pill like but tighter
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
