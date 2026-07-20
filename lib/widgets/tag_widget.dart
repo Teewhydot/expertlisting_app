@@ -18,10 +18,10 @@ class TagWidget extends StatelessWidget {
     final String text = isRent ? 'For Rent' : 'For Sale';
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(4), // Made slightly less rounded, more pill like but tighter
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

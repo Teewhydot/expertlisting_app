@@ -32,7 +32,8 @@ class _FeedPostCardState extends State<FeedPostCard> {
           _buildContent(),
           const SizedBox(height: 12),
           _buildLocationAndTag(),
-          if (widget.post.mediaType != MediaType.none) const SizedBox(height: 12),
+          if (widget.post.mediaType != MediaType.none)
+            const SizedBox(height: 12),
           _buildMedia(),
           const SizedBox(height: 16),
           PostActionBar(post: widget.post),
@@ -46,7 +47,9 @@ class _FeedPostCardState extends State<FeedPostCard> {
       children: [
         CircleAvatar(
           radius: 20,
-          backgroundImage: CachedNetworkImageProvider(widget.post.userProfileUrl),
+          backgroundImage: CachedNetworkImageProvider(
+            widget.post.userProfileUrl,
+          ),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -67,7 +70,10 @@ class _FeedPostCardState extends State<FeedPostCard> {
                     ),
                   ),
                   const SizedBox(width: 4),
-                  const Text('•', style: TextStyle(color: AppColors.textGrey, fontSize: 14)),
+                  const Text(
+                    '•',
+                    style: TextStyle(color: AppColors.textGrey, fontSize: 14),
+                  ),
                   const SizedBox(width: 4),
                   Flexible(
                     child: Text(
@@ -94,7 +100,10 @@ class _FeedPostCardState extends State<FeedPostCard> {
                     ),
                   ),
                   const SizedBox(width: 4),
-                  const Text('•', style: TextStyle(color: AppColors.textGrey, fontSize: 12)),
+                  const Text(
+                    '•',
+                    style: TextStyle(color: AppColors.textGrey, fontSize: 12),
+                  ),
                   const SizedBox(width: 4),
                   Flexible(
                     child: Text(
@@ -137,29 +146,31 @@ class _FeedPostCardState extends State<FeedPostCard> {
           'assets/icons/location.svg',
           width: 16,
           height: 16,
-          colorFilter: const ColorFilter.mode(AppColors.textGrey, BlendMode.srcIn),
+          colorFilter: const ColorFilter.mode(
+            AppColors.textGrey,
+            BlendMode.srcIn,
+          ),
         ),
         const SizedBox(width: 4),
-        Expanded(
+        Flexible(
           child: Text(
             widget.post.location,
-            style: const TextStyle(
-              color: AppColors.textGrey,
-              fontSize: 12,
-            ),
+            style: const TextStyle(color: AppColors.textGrey, fontSize: 12),
             overflow: TextOverflow.ellipsis,
           ),
         ),
         if (widget.post.tagType != TagType.none) ...[
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
           TagWidget(tagType: widget.post.tagType),
-        ]
+        ],
       ],
     );
   }
 
   Widget _buildMedia() {
-    if (widget.post.mediaType == MediaType.none || widget.post.mediaUrls == null || widget.post.mediaUrls!.isEmpty) {
+    if (widget.post.mediaType == MediaType.none ||
+        widget.post.mediaUrls == null ||
+        widget.post.mediaUrls!.isEmpty) {
       return const SizedBox.shrink();
     }
 
@@ -202,7 +213,11 @@ class _FeedPostCardState extends State<FeedPostCard> {
                   child: CircleAvatar(
                     backgroundColor: Colors.black.withValues(alpha: 0.5),
                     radius: 12,
-                    child: const Icon(Icons.chevron_right, color: Colors.white, size: 16),
+                    child: const Icon(
+                      Icons.chevron_right,
+                      color: Colors.white,
+                      size: 16,
+                    ),
                   ),
                 ),
             ],
@@ -214,12 +229,16 @@ class _FeedPostCardState extends State<FeedPostCard> {
               return Container(
                 width: 6.0,
                 height: 6.0,
-                margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                margin: const EdgeInsets.symmetric(
+                  vertical: 8.0,
+                  horizontal: 4.0,
+                ),
                 decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _currentCarouselIndex == entry.key
-                        ? AppColors.primaryGreen
-                        : AppColors.textGrey.withValues(alpha: 0.4)),
+                  shape: BoxShape.circle,
+                  color: _currentCarouselIndex == entry.key
+                      ? AppColors.primaryGreen
+                      : AppColors.textGrey.withValues(alpha: 0.4),
+                ),
               );
             }).toList(),
           ),
@@ -261,7 +280,7 @@ class _FeedPostCardState extends State<FeedPostCard> {
                 ],
               ),
             ),
-          )
+          ),
       ],
     );
   }
