@@ -31,7 +31,9 @@ class AppTheme {
         selectedItemColor: AppColors.primaryGreen,
         unselectedItemColor: AppColors.textGrey,
         type: BottomNavigationBarType.fixed,
-        elevation: 8,
+        elevation: 0, // Removed elevation to blend with background
+        selectedLabelStyle: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, height: 1.5),
+        unselectedLabelStyle: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, height: 1.5),
       ),
       textTheme: baseTextTheme.copyWith(
         bodyLarge: baseTextTheme.bodyLarge?.copyWith(color: AppColors.textLight),

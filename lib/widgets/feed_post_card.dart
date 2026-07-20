@@ -23,13 +23,12 @@ class _FeedPostCardState extends State<FeedPostCard> {
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.cardBackground,
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildHeader(),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           _buildContent(),
           const SizedBox(height: 12),
           _buildLocationAndTag(),

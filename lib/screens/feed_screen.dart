@@ -15,7 +15,10 @@ class FeedScreen extends StatelessWidget {
         children: [
           StoryList(stories: DummyData.stories),
           const Divider(),
-          ...DummyData.posts.map((post) => FeedPostCard(post: post)),
+          ...DummyData.posts.expand((post) => [
+            FeedPostCard(post: post),
+            const Divider(),
+          ]),
         ],
       ),
     );
