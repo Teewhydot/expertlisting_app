@@ -26,12 +26,20 @@ class TagWidget extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SvgPicture.asset(
-            isRent ? 'assets/icons/key.svg' : 'assets/icons/for_sale.svg',
-            width: 12,
-            height: 12,
-            colorFilter: ColorFilter.mode(textColor, BlendMode.srcIn),
-          ),
+          if (isRent)
+            Image.asset(
+              'assets/icons/key.png',
+              width: 12,
+              height: 12,
+              color: textColor, // This acts as a tint/colorFilter for the PNG
+            )
+          else
+            SvgPicture.asset(
+              'assets/icons/for_sale.svg',
+              width: 12,
+              height: 12,
+              colorFilter: ColorFilter.mode(textColor, BlendMode.srcIn),
+            ),
           const SizedBox(width: 4),
           Text(
             text,
