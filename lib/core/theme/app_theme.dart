@@ -8,7 +8,6 @@ class AppTheme {
     
     return ThemeData(
       fontFamily: 'OpenRunde',
-      fontFamilyFallback: const ['Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji'],
       brightness: Brightness.dark,
       scaffoldBackgroundColor: AppColors.background,
       primaryColor: AppColors.primaryGreen,

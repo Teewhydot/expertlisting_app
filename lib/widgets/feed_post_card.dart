@@ -55,43 +55,55 @@ class _FeedPostCardState extends State<FeedPostCard> {
             children: [
               Row(
                 children: [
-                  Text(
-                    widget.post.userName,
-                    style: const TextStyle(
-                      color: AppColors.textLight,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
+                  Flexible(
+                    child: Text(
+                      widget.post.userName,
+                      style: const TextStyle(
+                        color: AppColors.textLight,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   const SizedBox(width: 4),
                   const Text('•', style: TextStyle(color: AppColors.textGrey, fontSize: 14)),
                   const SizedBox(width: 4),
-                  Text(
-                    widget.post.userRole,
-                    style: const TextStyle(
-                      color: AppColors.textGrey,
-                      fontSize: 14,
+                  Flexible(
+                    child: Text(
+                      widget.post.userRole,
+                      style: const TextStyle(
+                        color: AppColors.textGrey,
+                        fontSize: 14,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
               ),
               Row(
                 children: [
-                  Text(
-                    widget.post.category,
-                    style: const TextStyle(
-                      color: AppColors.textGrey,
-                      fontSize: 12,
+                  Flexible(
+                    child: Text(
+                      widget.post.category,
+                      style: const TextStyle(
+                        color: AppColors.textGrey,
+                        fontSize: 12,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   const SizedBox(width: 4),
                   const Text('•', style: TextStyle(color: AppColors.textGrey, fontSize: 12)),
                   const SizedBox(width: 4),
-                  Text(
-                    widget.post.timeAgo,
-                    style: const TextStyle(
-                      color: AppColors.textGrey,
-                      fontSize: 12,
+                  Flexible(
+                    child: Text(
+                      widget.post.timeAgo,
+                      style: const TextStyle(
+                        color: AppColors.textGrey,
+                        fontSize: 12,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
@@ -128,11 +140,14 @@ class _FeedPostCardState extends State<FeedPostCard> {
           colorFilter: const ColorFilter.mode(AppColors.textGrey, BlendMode.srcIn),
         ),
         const SizedBox(width: 4),
-        Text(
-          widget.post.location,
-          style: const TextStyle(
-            color: AppColors.textGrey,
-            fontSize: 12,
+        Flexible(
+          child: Text(
+            widget.post.location,
+            style: const TextStyle(
+              color: AppColors.textGrey,
+              fontSize: 12,
+            ),
+            overflow: TextOverflow.ellipsis,
           ),
         ),
         if (widget.post.tagType != TagType.none) ...[
