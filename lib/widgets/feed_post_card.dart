@@ -152,7 +152,7 @@ class _FeedPostCardState extends State<FeedPostCard> {
           ),
         ),
         const SizedBox(width: 4),
-        Expanded(
+        Flexible(
           child: Text(
             widget.post.location,
             style: const TextStyle(color: AppColors.textGrey, fontSize: 12),
@@ -160,10 +160,8 @@ class _FeedPostCardState extends State<FeedPostCard> {
           ),
         ),
         if (widget.post.tagType != TagType.none) ...[
-          Padding(
-            padding: const EdgeInsets.only(right: 52.0),
-            child: TagWidget(tagType: widget.post.tagType),
-          ),
+          const SizedBox(width: 8),
+          TagWidget(tagType: widget.post.tagType),
         ],
       ],
     );
@@ -252,14 +250,22 @@ class _FeedPostCardState extends State<FeedPostCard> {
     return Stack(
       children: [
         if (widget.post.mediaType == MediaType.video)
-          AspectRatio(
-            aspectRatio: 9 / 16,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: CachedNetworkImage(
-                imageUrl: widget.post.mediaUrls!.first,
-                width: double.infinity,
-                fit: BoxFit.cover,
+          Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 52.0),
+              child: SizedBox(
+                height: 400,
+                child: AspectRatio(
+                  aspectRatio: 9 / 16,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: CachedNetworkImage(
+                      imageUrl: widget.post.mediaUrls!.first,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
               ),
             ),
           )
