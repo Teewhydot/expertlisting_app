@@ -249,18 +249,16 @@ class _FeedPostCardState extends State<FeedPostCard> {
     return Stack(
       children: [
         if (widget.post.mediaType == MediaType.video)
-          Align(
-            alignment: Alignment.centerLeft,
-            child: SizedBox(
-              height: 400,
-              child: AspectRatio(
-                aspectRatio: 9 / 16,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: CachedNetworkImage(
-                    imageUrl: widget.post.mediaUrls!.first,
-                    fit: BoxFit.cover,
-                  ),
+          Padding(
+            padding: const EdgeInsets.only(right: 52.0),
+            child: AspectRatio(
+              aspectRatio: 9 / 16,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: CachedNetworkImage(
+                  imageUrl: widget.post.mediaUrls!.first,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
