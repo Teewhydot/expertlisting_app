@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../models/post_model.dart';
 import '../widgets/feed_post_card.dart';
 import '../models/comment_model.dart';
 import '../data/api_service.dart';
+import '../providers/feed_provider.dart';
 import '../core/constants/app_colors.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class PostDetailsScreen extends StatefulWidget {
   final PostModel post;
@@ -50,6 +52,9 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
       setState(() {
         _comments.add(newComment);
       });
+      if (mounted) {
+        context.read<FeedProvider>().incrementCommentCount(widget.post.id);
+      }
     } catch (e) {
       debugPrint('Error posting comment: $e');
     }

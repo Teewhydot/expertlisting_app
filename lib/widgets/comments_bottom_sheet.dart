@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:provider/provider.dart';
 import '../models/post_model.dart';
 import '../models/comment_model.dart';
 import '../data/api_service.dart';
+import '../providers/feed_provider.dart';
 import '../core/constants/app_colors.dart';
 
 class CommentsBottomSheet extends StatefulWidget {
@@ -49,8 +51,9 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
       setState(() {
         _comments.add(newComment);
       });
-      // Optionally, we could notify FeedProvider to increment comment count,
-      // but for now, we just add it to the local list.
+      if (mounted) {
+        context.read<FeedProvider>().incrementCommentCount(widget.post.id);
+      }
     } catch (e) {
       debugPrint('Error posting comment: $e');
     }

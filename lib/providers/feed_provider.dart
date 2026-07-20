@@ -193,4 +193,15 @@ class FeedProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void incrementCommentCount(String postId) {
+    int index = _posts.indexWhere((p) => p.id == postId);
+    if (index == -1) return;
+
+    PostModel p = _posts[index];
+    _posts[index] = p.copyWith(comments: p.comments + 1);
+    
+    if (index < 50) _savePostsToCache();
+    notifyListeners();
+  }
 }
