@@ -16,7 +16,6 @@ class TagWidget extends StatelessWidget {
     final Color bgColor = isRent ? AppColors.tagForRentBg : AppColors.tagForSaleBg;
     final Color textColor = isRent ? AppColors.tagForRentText : AppColors.tagForSaleText;
     final String text = isRent ? 'For Rent' : 'For Sale';
-    final String iconAsset = isRent ? 'assets/icons/key.svg' : 'assets/icons/for_sale.svg';
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -27,12 +26,20 @@ class TagWidget extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SvgPicture.asset(
-            iconAsset,
-            width: 12,
-            height: 12,
-            colorFilter: ColorFilter.mode(textColor, BlendMode.srcIn),
-          ),
+          if (isRent)
+            Image.asset(
+              'assets/images/key.png',
+              width: 12,
+              height: 12,
+              color: textColor, // This acts as a tint/colorFilter for the PNG
+            )
+          else
+            SvgPicture.asset(
+              'assets/icons/for_sale.svg',
+              width: 12,
+              height: 12,
+              colorFilter: ColorFilter.mode(textColor, BlendMode.srcIn),
+            ),
           const SizedBox(width: 4),
           Text(
             text,
