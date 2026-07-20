@@ -141,10 +141,20 @@ class _FeedScreenState extends State<FeedScreen> {
               ),
 
               if (provider.newPostsCache.isNotEmpty)
-                Positioned(
-                  top: 110,
-                  left: 0,
-                  right: 0,
+                AnimatedBuilder(
+                  animation: _scrollController,
+                  builder: (context, child) {
+                    double offset = _scrollController.hasClients
+                        ? _scrollController.offset
+                        : 0.0;
+                    double topPosition = (110.0 - offset).clamp(16.0, 110.0);
+                    return Positioned(
+                      top: topPosition,
+                      left: 0,
+                      right: 0,
+                      child: child!,
+                    );
+                  },
                   child: Center(
                     child: TweenAnimationBuilder<double>(
                       tween: Tween(begin: 0.0, end: 1.0),
