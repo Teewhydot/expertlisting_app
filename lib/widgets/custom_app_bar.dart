@@ -11,14 +11,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         children: [
           // Logo Icon
-          Container(
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: const Icon(
-              Icons.maps_home_work_outlined, // Placeholder for the actual logo icon
+          Image.asset(
+            'assets/images/logo.png',
+            height: 24,
+            errorBuilder: (context, error, stackTrace) => const Icon(
+              Icons.maps_home_work_outlined,
               color: AppColors.primaryGreen,
               size: 24,
             ),
