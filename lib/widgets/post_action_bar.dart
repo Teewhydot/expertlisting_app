@@ -114,9 +114,39 @@ class PostActionBar extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       child: Row(
         children: [
-          Icon(icon, color: color, size: 20),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder: (child, animation) {
+              return ScaleTransition(scale: animation, child: child);
+            },
+            child: Icon(
+              icon,
+              key: ValueKey<String>('${icon.codePoint}_$color'),
+              color: color,
+              size: 20,
+            ),
+          ),
           const SizedBox(width: 4),
-          Text(count, style: TextStyle(color: color, fontSize: 14)),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder: (child, animation) {
+              return FadeTransition(
+                opacity: animation,
+                child: SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(0.0, -0.5),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                ),
+              );
+            },
+            child: Text(
+              count,
+              key: ValueKey<String>(count),
+              style: TextStyle(color: color, fontSize: 14),
+            ),
+          ),
         ],
       ),
     );
