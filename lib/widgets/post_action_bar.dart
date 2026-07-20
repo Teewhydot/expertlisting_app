@@ -59,49 +59,54 @@ class PostActionBar extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            SizedBox(
-              width: 50,
-              height: 20,
-              child: Stack(
-                children: List.generate(
-                  post.likedByProfileUrls.length,
-                  (index) => Positioned(
-                    left: index * 12.0,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.cardBackground,
-                          width: 2,
+        if (post.likedByProfileUrls.isNotEmpty) ...[
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              SizedBox(
+                width: 50,
+                height: 20,
+                child: Stack(
+                  children: List.generate(
+                    post.likedByProfileUrls.length,
+                    (index) => Positioned(
+                      left: index * 12.0,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.cardBackground,
+                            width: 2,
+                          ),
                         ),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: CachedNetworkImage(
-                          imageUrl: post.likedByProfileUrls[index],
-                          width: 16,
-                          height: 16,
-                          fit: BoxFit.cover,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: CachedNetworkImage(
+                            imageUrl: post.likedByProfileUrls[index],
+                            width: 16,
+                            height: 16,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              child: Text(
-                post.likedByText,
-                style: const TextStyle(color: AppColors.textGrey, fontSize: 12),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+              Expanded(
+                child: Text(
+                  post.likedByText,
+                  style: const TextStyle(
+                    color: AppColors.textGrey,
+                    fontSize: 12,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+        ],
       ],
     );
   }

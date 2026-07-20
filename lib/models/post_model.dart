@@ -78,6 +78,28 @@ class PostModel {
       tAgo = '${diff.inDays}d ago';
     }
 
+    int likeCount = json['like_count'] ?? 0;
+    List<String> likedUrls = [];
+    String likedText = '';
+
+    if (json['recent_likes'] != null && json['recent_likes'] is List) {
+      List recentLikes = json['recent_likes'];
+      if (recentLikes.isNotEmpty) {
+        for (var likeUser in recentLikes) {
+          if (likeUser != null && likeUser['avatar_url'] != null) {
+            likedUrls.add(likeUser['avatar_url']);
+          }
+        }
+
+        String firstUserName = recentLikes.first['name'] ?? 'Unknown';
+        if (likeCount == 1) {
+          likedText = 'Liked by $firstUserName';
+        } else if (likeCount > 1) {
+          likedText = 'Liked by $firstUserName and ${likeCount - 1} others';
+        }
+      }
+    }
+
     return PostModel(
       id: json['id'],
       userProfileUrl: json['user_avatar'] ?? 'https://i.pravatar.cc/150',
@@ -91,11 +113,11 @@ class PostModel {
       tagType: tType,
       mediaType: mType,
       mediaUrls: urls,
-      likes: json['like_count'] ?? 0,
+      likes: likeCount,
       comments: json['comment_count'] ?? 0,
-      bookmarks: 0,
-      likedByProfileUrls: [],
-      likedByText: '',
+      bookmarks: 2,
+      likedByProfileUrls: likedUrls,
+      likedByText: likedText,
       isLiked: json['is_liked'] ?? false,
     );
   }
