@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../models/post_model.dart';
 import '../widgets/feed_post_card.dart';
+import '../widgets/shimmer_comment_item.dart';
 import '../models/comment_model.dart';
 import '../data/api_service.dart';
 import '../providers/feed_provider.dart';
@@ -89,10 +90,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                   height: 1,
                 ),
                 if (_isLoading)
-                  const Padding(
-                    padding: EdgeInsets.all(32.0),
-                    child: Center(child: CircularProgressIndicator()),
-                  )
+                  ...List.generate(5, (index) => const ShimmerCommentItem())
                 else
                   ..._comments.map(
                     (comment) => CommentItemWidget(comment: comment),

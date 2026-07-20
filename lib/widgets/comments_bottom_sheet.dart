@@ -5,6 +5,7 @@ import '../models/post_model.dart';
 import '../models/comment_model.dart';
 import '../data/api_service.dart';
 import '../providers/feed_provider.dart';
+import 'shimmer_comment_item.dart';
 import '../core/constants/app_colors.dart';
 
 class CommentsBottomSheet extends StatefulWidget {
@@ -87,7 +88,10 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
           const Divider(color: AppColors.dividerColor),
           Expanded(
             child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
+                ? ListView.builder(
+                    itemCount: 5,
+                    itemBuilder: (context, index) => const ShimmerCommentItem(),
+                  )
                 : _comments.isEmpty
                 ? const Center(
                     child: Text(
