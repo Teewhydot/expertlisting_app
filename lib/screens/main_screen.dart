@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../core/constants/app_colors.dart';
 import 'feed_screen.dart';
 
@@ -20,6 +21,18 @@ class _MainScreenState extends State<MainScreen> {
     const Center(child: Text('Profile')),
   ];
 
+  Widget _buildIcon(String asset, {bool isActive = false}) {
+    return SvgPicture.asset(
+      asset,
+      width: 24,
+      height: 24,
+      colorFilter: isActive 
+        ? const ColorFilter.mode(AppColors.primaryGreen, BlendMode.srcIn)
+        : null, // Keep original colors if no colorFilter or apply grey if needed.
+                // The provided SVGs already have their fill/stroke colors set to #B8B8B8 or similar.
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,29 +44,30 @@ class _MainScreenState extends State<MainScreen> {
             _currentIndex = index;
           });
         },
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
+            icon: _buildIcon('assets/icons/feed.svg'),
+            activeIcon: _buildIcon('assets/icons/feed.svg', isActive: true),
             label: 'Feed',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
+            icon: _buildIcon('assets/icons/search.svg'),
+            activeIcon: _buildIcon('assets/icons/search.svg', isActive: true),
             label: 'Search',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_box_outlined),
-            activeIcon: Icon(Icons.add_box),
+            icon: _buildIcon('assets/icons/list.svg'),
+            activeIcon: _buildIcon('assets/icons/list.svg', isActive: true),
             label: 'List',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications_none_outlined),
-            activeIcon: Icon(Icons.notifications),
+            icon: _buildIcon('assets/icons/notification.svg'),
+            activeIcon: _buildIcon('assets/icons/notification.svg', isActive: true),
             label: 'Notification',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
+            icon: _buildIcon('assets/icons/profile.svg'),
+            activeIcon: _buildIcon('assets/icons/profile.svg', isActive: true),
             label: 'Profile',
           ),
         ],

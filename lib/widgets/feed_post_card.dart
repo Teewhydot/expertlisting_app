@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../core/constants/app_colors.dart';
 import '../models/post_model.dart';
 import 'post_action_bar.dart';
@@ -121,7 +122,12 @@ class _FeedPostCardState extends State<FeedPostCard> {
   Widget _buildLocationAndTag() {
     return Row(
       children: [
-        const Icon(Icons.location_on_outlined, color: AppColors.textGrey, size: 16),
+        SvgPicture.asset(
+          'assets/icons/location.svg',
+          width: 16,
+          height: 16,
+          colorFilter: const ColorFilter.mode(AppColors.textGrey, BlendMode.srcIn),
+        ),
         const SizedBox(width: 4),
         Text(
           widget.post.location,

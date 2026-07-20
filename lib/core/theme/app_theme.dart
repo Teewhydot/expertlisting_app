@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import '../constants/app_colors.dart';
 
 class AppTheme {
   static ThemeData get darkTheme {
-    // You can easily change the font family here by swapping GoogleFonts.inter 
-    // to any other font or using a custom font family.
-    final baseTextTheme = GoogleFonts.interTextTheme();
+    final baseTextTheme = ThemeData.dark().textTheme;
     
     return ThemeData(
+      fontFamily: 'OpenRunde',
       brightness: Brightness.dark,
       scaffoldBackgroundColor: AppColors.background,
       primaryColor: AppColors.primaryGreen,

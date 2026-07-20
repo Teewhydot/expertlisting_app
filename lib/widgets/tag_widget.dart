@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../core/constants/app_colors.dart';
 import '../models/post_model.dart';
 
@@ -15,7 +16,7 @@ class TagWidget extends StatelessWidget {
     final Color bgColor = isRent ? AppColors.tagForRentBg : AppColors.tagForSaleBg;
     final Color textColor = isRent ? AppColors.tagForRentText : AppColors.tagForSaleText;
     final String text = isRent ? 'For Rent' : 'For Sale';
-    final IconData icon = isRent ? Icons.key : Icons.local_offer_outlined;
+    final String iconAsset = isRent ? 'assets/icons/key.svg' : 'assets/icons/for_sale.svg';
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -26,7 +27,12 @@ class TagWidget extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 12, color: textColor),
+          SvgPicture.asset(
+            iconAsset,
+            width: 12,
+            height: 12,
+            colorFilter: ColorFilter.mode(textColor, BlendMode.srcIn),
+          ),
           const SizedBox(width: 4),
           Text(
             text,
