@@ -251,12 +251,20 @@ class _FeedPostCardState extends State<FeedPostCard> {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(12),
-          child: CachedNetworkImage(
-            imageUrl: widget.post.mediaUrls!.first,
-            height: 200,
-            width: double.infinity,
-            fit: BoxFit.cover,
-          ),
+          child: widget.post.mediaType == MediaType.video
+              ? AspectRatio(
+                  aspectRatio: 9 / 16,
+                  child: CachedNetworkImage(
+                    imageUrl: widget.post.mediaUrls!.first,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                )
+              : CachedNetworkImage(
+                  imageUrl: widget.post.mediaUrls!.first,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
         ),
         if (widget.post.mediaType == MediaType.video)
           Positioned(
