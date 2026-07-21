@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
 import '../models/post_model.dart';
 import '../models/comment_model.dart';
 
 class ApiService {
-  static const String baseUrl = 'http://localhost:8080/api/v1';
+  static const String baseUrl = kDebugMode
+      ? 'http://localhost:8080/api/v1'
+      : 'https://expertlisting-backend.onrender.com/api/v1';
 
   // Fetch posts with cursor pagination
   static Future<Map<String, dynamic>> getPosts({
