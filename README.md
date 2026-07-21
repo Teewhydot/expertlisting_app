@@ -59,3 +59,27 @@ When a user launches the app after being offline for days, pulling hundreds of m
 ### 📱 Download Release
 If you'd like to test the live production app directly without building from source, download the latest Release APK here:
 👉 **[Download APK (Coming Soon)](#)**
+
+---
+
+## 📋 Assessment Details
+
+### API Endpoints
+The backend is a Golang/Gin service hosted on Render at `https://expertlisting-backend.onrender.com`.
+- `GET /api/v1/posts` - Fetches a paginated feed of posts. Supports `type` (all, property, general, request), `limit`, and `cursor` (Timestamp|UUID).
+- `POST /api/v1/posts/:id/like` - Toggles a like for the current user on a specific post.
+- `GET /api/v1/posts/:id/comments` - Fetches comments for a specific post.
+- `POST /api/v1/posts/:id/comments` - Adds a new comment to a post.
+- `GET /api/v1/sidebar` - Fetches dynamic sidebar data (Trending Locations & Hot Requests).
+
+### Database Schema
+The database is PostgreSQL (hosted on Supabase) using the following core relational schema:
+- **users**: `id (UUID)`, `name`, `avatar_url`, `created_at`
+- **posts**: `id (UUID)`, `user_id (FK)`, `type (Enum)`, `content`, `image_url`, `location`, `price`, `bedrooms`, `bathrooms`, `created_at`
+- **comments**: `id (UUID)`, `post_id (FK)`, `user_id (FK)`, `content`, `created_at`
+- **likes**: `id (UUID)`, `post_id (FK)`, `user_id (FK)`, `created_at`, `UNIQUE(post_id, user_id)`
+
+### Out of Scope & Assumptions
+- **Authentication**: As per requirements, full auth/login was skipped. The backend uses a mocked "Current User" middleware that injects a static UUID into the context for all requests.
+- **Top Communities**: The "Top Communities" section of the sidebar is mocked on the backend, while "Trending Locations" and "Hot Requests" are dynamically aggregated using real SQL queries.
+- **Image Uploads**: Post creation was out of scope. Images are mocked via URLs in the background database seeder.
