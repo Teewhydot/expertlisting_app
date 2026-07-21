@@ -58,7 +58,7 @@ When a user launches the app after being offline for days, pulling hundreds of m
 
 ### 📱 Download Release
 If you'd like to test the live production app directly without building from source, download the latest Release APK here:
-👉 **[Download APK (Coming Soon)](#)**
+👉 **[Download Release APK](https://drive.google.com/file/d/1ZczZEjalw3qOPZddcLIh5V9Nqbg_G-l8/view?usp=sharing)**
 
 ---
 
