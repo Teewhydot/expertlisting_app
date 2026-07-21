@@ -18,7 +18,6 @@ class FeedProvider extends ChangeNotifier {
 
   int _pendingPingsCount = 0;
   Timer? _throttleTimer;
-  Timer? _reconcileTimer;
 
   List<PostModel> get posts => _posts;
   List<PostModel> get newPostsCache => _newPostsCache;
@@ -173,12 +172,53 @@ class FeedProvider extends ChangeNotifier {
           _fetchDebouncedPosts();
         });
       }
-    } else {
-      // Debounce likes and comments updates to prevent API spam
-      _reconcileTimer?.cancel();
-      _reconcileTimer = Timer(const Duration(seconds: 2), () {
-        _reconcileStats();
-      });
+    } else if (payload.table == 'likes' || payload.table == 'comments') {
+      // Ultra-efficient local increment (zero API calls)
+
+      // Ignore our own actions since they are already handled optimistically
+      final String currentUserId = 'a0000000-0000-0000-0000-000000000001';
+
+      if (payload.eventType == PostgresChangeEvent.insert) {
+        if (payload.newRecord['user_id'] == currentUserId) return;
+
+        final postId = payload.newRecord['post_id'];
+        if (postId != null) {
+          int index = _posts.indexWhere((p) => p.id == postId);
+          if (index != -1) {
+            if (payload.table == 'likes') {
+              _posts[index] = _posts[index].copyWith(
+                likes: _posts[index].likes + 1,
+              );
+            } else {
+              _posts[index] = _posts[index].copyWith(
+                comments: _posts[index].comments + 1,
+              );
+            }
+            notifyListeners();
+          }
+        }
+      } else if (payload.eventType == PostgresChangeEvent.delete) {
+        if (payload.oldRecord['user_id'] == currentUserId) return;
+
+        final postId = payload.oldRecord['post_id'];
+        if (postId != null) {
+          int index = _posts.indexWhere((p) => p.id == postId);
+          if (index != -1) {
+            if (payload.table == 'likes') {
+              _posts[index] = _posts[index].copyWith(
+                likes: _posts[index].likes > 0 ? _posts[index].likes - 1 : 0,
+              );
+            } else {
+              _posts[index] = _posts[index].copyWith(
+                comments: _posts[index].comments > 0
+                    ? _posts[index].comments - 1
+                    : 0,
+              );
+            }
+            notifyListeners();
+          }
+        }
+      }
     }
   }
 
@@ -217,33 +257,6 @@ class FeedProvider extends ChangeNotifier {
       if (hasChanges) notifyListeners();
     } catch (e) {
       debugPrint('Debounced fetch error: $e');
-    }
-  }
-
-  Future<void> _reconcileStats() async {
-    try {
-      final data = await ApiService.getPosts(type: _currentType, limit: 10);
-      List<PostModel> latestPosts = data['posts'];
-      bool hasChanges = false;
-
-      for (var post in latestPosts) {
-        int indexInMain = _posts.indexWhere((p) => p.id == post.id);
-        if (indexInMain != -1) {
-          PostModel existingPost = _posts[indexInMain];
-          if (existingPost.likes != post.likes ||
-              existingPost.comments != post.comments) {
-            _posts[indexInMain] = existingPost.copyWith(
-              likes: post.likes,
-              comments: post.comments,
-            );
-            hasChanges = true;
-          }
-        }
-      }
-
-      if (hasChanges) notifyListeners();
-    } catch (e) {
-      debugPrint('Reconcile stats error: $e');
     }
   }
 
