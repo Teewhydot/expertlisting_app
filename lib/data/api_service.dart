@@ -5,9 +5,11 @@ import '../models/post_model.dart';
 import '../models/comment_model.dart';
 
 class ApiService {
-  static const String baseUrl = kDebugMode
-      ? 'http://localhost:8080/api/v1'
-      : 'https://expertlisting-backend.onrender.com/api/v1';
+  static String get baseUrl {
+    if (!kDebugMode) return 'https://expertlisting-backend.onrender.com/api/v1';
+    if (defaultTargetPlatform == TargetPlatform.android) return 'http://10.0.2.2:8080/api/v1';
+    return 'http://localhost:8080/api/v1';
+  }
 
   // Fetch posts with cursor pagination
   static Future<Map<String, dynamic>> getPosts({

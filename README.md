@@ -60,6 +60,9 @@ When a user launches the app after being offline for days, pulling hundreds of m
 If you'd like to test the live production app directly without building from source, download the latest Release APK here:
 👉 **[Download Release APK](https://drive.google.com/file/d/1ZczZEjalw3qOPZddcLIh5V9Nqbg_G-l8/view?usp=sharing)**
 
+### 🎥 Video Walkthrough
+Watch a quick 2-minute video demonstrating the live app, the Optimistic UI, and the smooth cursor pagination in action:
+👉 **[Watch on Loom](https://www.loom.com/share/a05d6b530f6a47baab5887cacaa9a31e)**
 ---
 
 ## 📋 Assessment Details
