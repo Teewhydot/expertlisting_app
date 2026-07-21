@@ -1,17 +1,61 @@
-# expertlisting_app
+# ExpertListing App
 
-A new Flutter project.
+ExpertListing is a high-performance, real-time real estate and general networking platform built with **Flutter**, **Golang**, and **PostgreSQL**.
 
-## Getting Started
+This repository showcases an architecture optimized for speed, bandwidth conservation, and a seamless user experience reminiscent of top-tier social platforms.
 
-This project is a starting point for a Flutter application.
+## 🏗 System Design & Architectural Highlights
 
-A few resources to get you started if this is your first Flutter project:
+### 1. Optimistic UI & Race Condition Prevention
+To make the app feel incredibly snappy, interactions like "Liking" a post update the UI instantly without waiting for network confirmation. 
+- **The Challenge:** Since the app also listens to a real-time WebSocket channel for live updates, a local UI increment followed by a WebSocket broadcast could result in a "double-count" race condition.
+- **The Solution:** The local state specifically flags the interacting user's ID. When the real-time ping arrives from the backend, the payload is checked. If the event originated from the current user, the WebSocket payload is intentionally ignored, preventing duplicate fires while still broadcasting the increment to all other connected clients.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+### 2. Intelligent Real-Time Feed (Popup Aggregation)
+When new posts are made by other users while the app is active, injecting them instantly into the top of the feed would forcefully push down the content the user is currently reading (UI jitter).
+- **The Solution:** Real-time posts are silently caught by a background cache. A throttled listener aggregates these events and triggers a smooth floating **"New posts available"** popup. The user controls when their feed updates by tapping the popup, which smoothly animates the new posts into the UI.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 3. Cursor-Based Pagination
+For a highly dynamic feed where new items are inserted constantly, traditional `OFFSET/LIMIT` pagination causes data duplication or skipping. 
+- **The Solution:** We implemented **Cursor-Based Pagination** using a `(timestamp, id)` tuple. This guarantees stable feed generation regardless of how many new items are injected into the database between scrolls.
+
+### 4. Bandwidth-Optimized Cold Boots
+When a user launches the app after being offline for days, pulling hundreds of missed posts would be a massive waste of cellular bandwidth and drastically increase load times.
+- **The Solution:** On launch, the app instantly reads `SharedPreferences` to paint the screen with the last 50 cached posts (zero loading spinners). Concurrently, a background network call fetches *only* the **10 absolute newest posts** from the Golang backend. Older missed posts are simply fetched incrementally if the user decides to scroll down. 
+
+### 5. Backend: Golang & PostgreSQL
+- **High-Concurrency:** Powered by a lightweight **Golang (Gin)** backend utilizing `pgxpool` for optimal database connection pooling.
+- **Eliminating Cartesian Explosion:** SQL queries for generating the feed bypass traditional `LEFT JOIN` aggregations (which cause catastrophic Cartesian product slowdowns). Instead, we utilize ultra-efficient **Correlated Subqueries** to pull aggregate counts (likes, comments), reducing query execution time significantly.
+- **Background Simulator:** Built-in Go routines continuously generate realistic Real Estate listings and general networking posts at randomized intervals, simulating an active production environment for testing WebSocket handling.
+- **Real-Time Layer:** Supabase acts purely as the PostgreSQL database host and WebSocket broadcasting layer, offloading real-time infrastructure while keeping custom business logic firmly in the Go backend.
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Flutter SDK (stable channel)
+- Dart SDK
+- iOS Simulator or Android Emulator
+
+### Running Locally
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/expertlisting_app.git
+   cd expertlisting_app
+   ```
+
+2. **Install dependencies**
+   ```bash
+   flutter pub get
+   ```
+
+3. **Run the App**
+   *(Note: The app is configured to route to the production Render backend automatically in Release mode, and a local Go server in Debug mode using `kDebugMode`).*
+   ```bash
+   # Run on emulator/device
+   flutter run
+   ```
+
+### 📱 Download Release
+If you'd like to test the live production app directly without building from source, download the latest Release APK here:
+👉 **[Download APK (Coming Soon)](#)**

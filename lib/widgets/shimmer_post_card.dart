@@ -14,8 +14,8 @@ class ShimmerPostCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Shimmer.fromColors(
-            baseColor: AppColors.background,
-            highlightColor: AppColors.cardBackground,
+            baseColor: Colors.grey[850]!,
+            highlightColor: Colors.grey[800]!,
             child: Container(
               width: 40,
               height: 40,
@@ -176,8 +176,8 @@ class ShimmerBoxWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: AppColors.background,
-      highlightColor: AppColors.cardBackground,
+      baseColor: Colors.grey[850]!,
+      highlightColor: Colors.grey[800]!,
       child: Container(
         width: width,
         height: height,
@@ -198,8 +198,8 @@ class ShimmerCircleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: AppColors.background,
-      highlightColor: AppColors.cardBackground,
+      baseColor: Colors.grey[850]!,
+      highlightColor: Colors.grey[800]!,
       child: Container(
         width: size,
         height: size,

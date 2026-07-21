@@ -20,8 +20,8 @@ class ShimmerStoryList extends StatelessWidget {
             child: Column(
               children: [
                 Shimmer.fromColors(
-                  baseColor: AppColors.background,
-                  highlightColor: AppColors.cardBackground,
+                  baseColor: Colors.grey[850]!,
+                  highlightColor: Colors.grey[800]!,
                   child: Container(
                     width: 60,
                     height: 60,
@@ -33,8 +33,8 @@ class ShimmerStoryList extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Shimmer.fromColors(
-                  baseColor: AppColors.background,
-                  highlightColor: AppColors.cardBackground,
+                  baseColor: Colors.grey[850]!,
+                  highlightColor: Colors.grey[800]!,
                   child: Container(
                     width: 50,
                     height: 10,
